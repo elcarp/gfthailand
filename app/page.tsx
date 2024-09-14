@@ -27,7 +27,7 @@ export default function Home() {
       <section className='flex'>
         <div className='h-screen w-1/2'>
           <GoogleMapApiLoader
-            apiKey='AIzaSyAc4TUtJCbR_8sdVpgAcJLKrEBKRVmMhVE'
+            apiKey={`${process.env.NEXT_PUBLIC_GOOGLE_MAPS}`}
             suspense>
             <Map />
           </GoogleMapApiLoader>
