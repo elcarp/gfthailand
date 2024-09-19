@@ -16,8 +16,8 @@ function Map() {
     <GoogleMap
       className='h-full'
       zoom={17}
-      center={{ lat: 37.5709413, lng: 126.977787 }}>
-      <Marker lat={37.5709413} lng={126.977787} />
+      center={{ lat: 13.735925009176135, lng: 100.56334643097027 }}>
+      <Marker lat={13.735925009176135} lng={100.56334643097027} />
     </GoogleMap>
   )
 }
