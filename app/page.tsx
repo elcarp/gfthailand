@@ -73,9 +73,9 @@ export default function Home() {
           <Image src={Meal} layout='fill' objectFit='cover' alt='meal' />
         </div>
         <div
-          className='absolute top-1/3 left-0 right-0 max-w-4xl text-center mx-auto shadow-xl rounded-xl p-10 z-20'
+          className='absolute top-1/3 left-0 right-0 max-w-4xl mx-auto shadow-xl rounded-xl p-10 z-20'
           style={{ backgroundColor: 'rgb(255 255 255 / 90%)' }}>
-          <h1 className={`${permanentMarker.className} text-4xl`}>
+          <h1 className={`${permanentMarker.className} text-4xl text-center`}>
             Explore the best gluten free restaurants in Thailand
           </h1>
           <div className='rounded-xl bg-white w-full flex justify-between shadow-xl p-10 mt-2'>
