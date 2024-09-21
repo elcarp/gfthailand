@@ -12,7 +12,6 @@ const msMadi = Ms_Madi({
   subsets: ['latin'],
 })
 
-
 export default function Home() {
   const neighborhoodOptions = [
     {
@@ -70,11 +69,11 @@ export default function Home() {
       <Header />
 
       <section className='w-full'>
-        <div className='relative h-screen w-full'>
-          <Image src={Meal} object-fit='cover' alt='meal' />
+        <div className='relative w-full h-screen'>
+          <Image src={Meal} layout='fill' objectFit='cover' alt='meal' />
         </div>
         <div
-          className='absolute top-1/3 left-0 right-0 w-3/4 text-center mx-auto shadow-xl rounded-xl p-10 z-20'
+          className='absolute top-1/3 left-0 right-0 max-w-4xl text-center mx-auto shadow-xl rounded-xl p-10 z-20'
           style={{ backgroundColor: 'rgb(255 255 255 / 90%)' }}>
           <h1 className={`${msMadi.className} text-4xl`}>
             Explore the best gluten free restaurants in Thailand
@@ -96,6 +95,9 @@ export default function Home() {
             </div>
           </div>
         </div>
+      </section>
+      <section className='bg-white max-w-4xl mx-auto rounded-xl shadow-xl p-10 -mt-[15rem] z-30 relative'>
+        <h2 className={`${msMadi.className} text-4xl`}>Trending</h2>
       </section>
     </>
   )
