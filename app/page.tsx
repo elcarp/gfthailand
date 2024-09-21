@@ -1,39 +1,27 @@
-'use client'
-
-import Image from 'next/image'
-
-import glutenBg from '~public/images/gluten-bg.jpg'
-
 import React from 'react'
-// import { Suspense } from 'react';
-import { GoogleMap, GoogleMapApiLoader, Marker } from 'react-google-map-wrapper'
-// import { Fallback } from '../components';
+import Header from '~components/header'
+import Image from 'next/image'
+import Meal from '~public/images/gf-meal.jpg'
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 
-function Map() {
-  return (
-    // you can pass props to map container element.
-    // use Tailwind CSS or styled-components or anything to style your container.
-    <GoogleMap
-      className='h-full'
-      zoom={17}
-      center={{ lat: 13.735925009176135, lng: 100.56334643097027 }}>
-      <Marker lat={13.735925009176135} lng={100.56334643097027} />
-    </GoogleMap>
-  )
-}
 export default function Home() {
   return (
     <>
-      <section className='flex'>
-        <div className='h-screen w-1/2'>
-          <GoogleMapApiLoader
-            apiKey={`${process.env.NEXT_PUBLIC_GOOGLE_MAPS}`}
-            suspense>
-            <Map />
-          </GoogleMapApiLoader>
+      <Header />
+
+      <section className='w-full'>
+        <div className='relative h-screen w-full'>
+          <Image src={Meal} object-fit='cover' alt='meal' />
         </div>
-        <div className='w-1/2 relative h-screen'>
-          <Image src={glutenBg} alt='gluten' layout='fill' objectFit='cover' />
+        <div
+          className='absolute top-1/2 left-0 right-0 w-3/4 text-center mx-auto shadow-xl rounded-xl p-10 z-20'
+          style={{ backgroundColor: 'rgb(255 255 255 / 90%)' }}>
+          <h1 className='text-2xl font-bold'>
+            Explore the best gluten free restaurants in Thailand
+          </h1>
+          <div className='rounded-xl bg-white w-full shadow-xl p-10'>
+            <MagnifyingGlassIcon aria-hidden='true' className='h-6 w-6' />
+          </div>
         </div>
       </section>
     </>
