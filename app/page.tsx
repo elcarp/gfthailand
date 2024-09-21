@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import Header from '~components/header'
 import Image from 'next/image'
@@ -7,7 +8,7 @@ import {
   MagnifyingGlassIcon,
   MapPinIcon,
 } from '@heroicons/react/24/outline'
-import { Select } from '@headlessui/react'
+import Select from 'react-select'
 
 export default function Home() {
   const neighborhoodOptions = [
@@ -78,31 +79,17 @@ export default function Home() {
           <div className='rounded-xl bg-white w-full flex justify-between shadow-xl p-10 mt-4'>
             <div className='flex items-center'>
               <MapPinIcon aria-hidden='true' className='h-6 w-6' />
-              <Select className='focus:outline-none min-w-36 ml-4'>
-                {neighborhoodOptions.map(({ label, value }) => {
-                  return (
-                    <>
-                      <option key={value} value={value}>
-                        {label}
-                      </option>
-                    </>
-                  )
-                })}
-              </Select>
+              <Select
+                options={neighborhoodOptions}
+                className='focus:outline-none min-w-36 ml-4'
+              />
             </div>
             <div className='flex items-center'>
               <FireIcon aria-hidden='true' className='h-6 w-6' />
-              <Select className='focus:outline-none min-w-36 ml-4 capitalize'>
-                {cuisineOptions.map(({ label, value }) => {
-                  return (
-                    <>
-                      <option key={value} value={value}>
-                        {label}
-                      </option>
-                    </>
-                  )
-                })}
-              </Select>
+              <Select
+                options={cuisineOptions}
+                className='focus:outline-none min-w-36 ml-4 capitalize'
+              />
             </div>
             <MagnifyingGlassIcon aria-hidden='true' className='h-6 w-6' />
           </div>
