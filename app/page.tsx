@@ -3,12 +3,15 @@ import React from 'react'
 import Header from '~components/header'
 import Image from 'next/image'
 import Meal from '~public/images/gf-meal.jpg'
-import {
-  FireIcon,
-  MagnifyingGlassIcon,
-  MapPinIcon,
-} from '@heroicons/react/24/outline'
+import { MapPinIcon } from '@heroicons/react/24/outline'
 import Select from 'react-select'
+import { Ms_Madi } from 'next/font/google'
+
+const msMadi = Ms_Madi({
+  weight: '400',
+  subsets: ['latin'],
+})
+
 
 export default function Home() {
   const neighborhoodOptions = [
@@ -73,10 +76,10 @@ export default function Home() {
         <div
           className='absolute top-1/3 left-0 right-0 w-3/4 text-center mx-auto shadow-xl rounded-xl p-10 z-20'
           style={{ backgroundColor: 'rgb(255 255 255 / 90%)' }}>
-          <h1 className='text-2xl font-bold'>
+          <h1 className={`${msMadi.className} text-4xl`}>
             Explore the best gluten free restaurants in Thailand
           </h1>
-          <div className='rounded-xl bg-white w-full flex justify-between shadow-xl p-10 mt-4'>
+          <div className='rounded-xl bg-white w-full flex justify-between shadow-xl p-10 mt-2'>
             <div className='flex items-center'>
               <MapPinIcon aria-hidden='true' className='h-6 w-6' />
               <Select
@@ -84,14 +87,13 @@ export default function Home() {
                 className='focus:outline-none min-w-36 ml-4'
               />
             </div>
-            <div className='flex items-center'>
-              <FireIcon aria-hidden='true' className='h-6 w-6' />
+            <div className='flex items-center w-full'>
               <Select
                 options={cuisineOptions}
-                className='focus:outline-none min-w-36 ml-4 capitalize'
+                placeholder='Search restaurants...'
+                className='focus:outline-none w-full ml-4 capitalize'
               />
             </div>
-            <MagnifyingGlassIcon aria-hidden='true' className='h-6 w-6' />
           </div>
         </div>
       </section>
