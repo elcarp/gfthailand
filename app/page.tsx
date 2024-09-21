@@ -5,9 +5,9 @@ import Image from 'next/image'
 import Meal from '~public/images/gf-meal.jpg'
 import { MapPinIcon } from '@heroicons/react/24/outline'
 import Select from 'react-select'
-import { Ms_Madi } from 'next/font/google'
+import { Permanent_Marker } from 'next/font/google'
 
-const msMadi = Ms_Madi({
+const permanentMarker = Permanent_Marker({
   weight: '400',
   subsets: ['latin'],
 })
@@ -75,7 +75,7 @@ export default function Home() {
         <div
           className='absolute top-1/3 left-0 right-0 max-w-4xl text-center mx-auto shadow-xl rounded-xl p-10 z-20'
           style={{ backgroundColor: 'rgb(255 255 255 / 90%)' }}>
-          <h1 className={`${msMadi.className} text-4xl`}>
+          <h1 className={`${permanentMarker.className} text-4xl`}>
             Explore the best gluten free restaurants in Thailand
           </h1>
           <div className='rounded-xl bg-white w-full flex justify-between shadow-xl p-10 mt-2'>
@@ -97,7 +97,7 @@ export default function Home() {
         </div>
       </section>
       <section className='bg-white max-w-4xl mx-auto rounded-xl shadow-xl p-10 -mt-[15rem] z-30 relative'>
-        <h2 className={`${msMadi.className} text-4xl`}>Trending</h2>
+        <h2 className={`${permanentMarker.className} text-4xl`}>Trending</h2>
       </section>
     </>
   )
