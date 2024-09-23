@@ -6,6 +6,7 @@ import Meal from '~public/images/gf-meal.jpg'
 import { MapPinIcon } from '@heroicons/react/24/outline'
 import Select from 'react-select'
 import { Permanent_Marker } from 'next/font/google'
+import GoogleMaps from '~components/maps'
 
 const permanentMarker = Permanent_Marker({
   weight: '400',
@@ -78,6 +79,14 @@ export default function Home() {
           <h1 className={`${permanentMarker.className} text-4xl text-center`}>
             Explore Thailand&apos;s best gluten-free restaurants
           </h1>
+          <div className='container mx-auto p-4'>
+            <h1 className='text-2xl font-bold mb-4'>Google Maps Example</h1>
+            <GoogleMaps
+              apiKey={`${process.env.NEXT_PUBLIC_GOOGLE_MAPS}`}
+              center={{ lat: 40.7128, lng: -74.006 }} // New York City coordinates
+              zoom={12}
+            />
+          </div>
           <div className='rounded-xl bg-white w-full flex justify-between shadow-xl p-10 mt-2'>
             <div className='flex items-center'>
               <MapPinIcon aria-hidden='true' className='h-6 w-6' />
@@ -96,7 +105,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className='bg-white max-w-4xl mx-auto rounded-xl shadow-xl p-10 -mt-[15rem] z-30 relative'>
+      <section className='bg-white max-w-4xl mx-auto rounded-xl shadow-xl p-10 z-30 relative'>
         <h2 className={`${permanentMarker.className} text-4xl`}>Trending</h2>
       </section>
     </>
