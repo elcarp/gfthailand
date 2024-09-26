@@ -76,12 +76,16 @@ export default function Home() {
           backgroundAttachment: 'fixed',
         }}>
         <div className='overlay w-full h-screen-1/2 bg-black opacity-50 absolute' />
-        <div
-          className='max-w-4xl mx-auto p-10 absolute z-20 left-0 right-0 mt-10'
-        >
-          <h1
-            className={`${permanentMarker.className} text-white text-4xl text-center`}>
-            Explore Thailand&apos;s best gluten-free restaurants
+        <div className='max-w-4xl mx-auto p-10 absolute z-20 left-0 right-0'>
+          <h1 className={`text-white text-4xl text-center font-black leading-12`}>
+            Explore Thailand&apos;s best{' '}
+            <span
+              className={`${permanentMarker.className} clear-both block text-7xl`}
+              // style={{ fontSize: 'inherit' }}
+              >
+              gluten-free
+            </span>{' '}
+            restaurants
           </h1>
           <div className='rounded-xl w-full flex justify-between p-10 mt-2'>
             <div className='flex items-center'>
