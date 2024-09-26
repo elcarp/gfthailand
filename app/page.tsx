@@ -68,14 +68,14 @@ export default function Home() {
       <Header />
 
       <section
-        className='w-full h-screen-1/2 flex'
+        className='w-full h-screen lg:h-screen-1/2 flex'
         style={{
           backgroundImage: `url('/images/gf-meal.jpg')`,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundAttachment: 'fixed',
         }}>
-        <div className='overlay w-full h-screen-1/2 bg-black opacity-50 absolute' />
+        <div className='overlay w-full h-screen lg:h-screen-1/2 bg-black opacity-50 absolute' />
         <div className='max-w-4xl mx-auto p-10 absolute z-20 left-0 right-0'>
           <h1 className={`text-white text-4xl text-center font-black leading-12`}>
             Explore Thailand&apos;s best{' '}
@@ -87,7 +87,7 @@ export default function Home() {
             </span>{' '}
             restaurants
           </h1>
-          <div className='rounded-xl w-full flex justify-between p-10 mt-2'>
+          <div className='rounded-xl w-full lg:flex justify-between p-10 mt-2'>
             <div className='flex items-center'>
               <MapPinIcon aria-hidden='true' className='h-6 w-6 text-white' />
               <Select

@@ -17,7 +17,7 @@ export default function Example() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <header className='bg-white'>
+    <header className='bg-wheat-600'>
       <nav
         aria-label='Global'
         className='mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8'>
@@ -31,7 +31,7 @@ export default function Example() {
           <button
             type='button'
             onClick={() => setMobileMenuOpen(true)}
-            className='-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700'>
+            className='-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-white'>
             <span className='sr-only'>Open main menu</span>
             <Bars3Icon aria-hidden='true' className='h-6 w-6' />
           </button>
@@ -42,13 +42,13 @@ export default function Example() {
               key={item.name}
               href={item.href}
               target={item.target ? item.target : '_self'}
-              className='text-sm font-semibold leading-6 text-gray-900'>
+              className='text-sm font-semibold leading-6 text-white'>
               {item.name}
             </a>
           ))}
         </div>
         <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
-          <a href='#' className='text-sm font-semibold leading-6 text-gray-900'>
+          <a href='#' className='text-sm font-semibold leading-6 text-white'>
             Log in <span aria-hidden='true'>&rarr;</span>
           </a>
         </div>
@@ -71,7 +71,7 @@ export default function Example() {
             <button
               type='button'
               onClick={() => setMobileMenuOpen(false)}
-              className='-m-2.5 rounded-md p-2.5 text-gray-700'>
+              className='-m-2.5 rounded-md p-2.5 text-white'>
               <span className='sr-only'>Close menu</span>
               <XMarkIcon aria-hidden='true' className='h-6 w-6' />
             </button>
@@ -83,7 +83,7 @@ export default function Example() {
                   <a
                     key={item.name}
                     href={item.href}
-                    className='-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'>
+                    className='-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-50'>
                     {item.name}
                   </a>
                 ))}
@@ -91,7 +91,7 @@ export default function Example() {
               <div className='py-6'>
                 <a
                   href='#'
-                  className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'>
+                  className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-white hover:bg-gray-50'>
                   Log in
                 </a>
               </div>
