@@ -1,8 +1,6 @@
 'use client'
 import React from 'react'
 import Header from '~components/header'
-import Image from 'next/image'
-import Meal from '~public/images/gf-meal.jpg'
 import { MapPinIcon } from '@heroicons/react/24/outline'
 import Select from 'react-select'
 import { Permanent_Marker } from 'next/font/google'
