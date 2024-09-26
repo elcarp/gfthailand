@@ -9,7 +9,7 @@ import Image from 'next/image'
 const navigation = [
   { name: 'Search', href: '#' },
   { name: 'Discover', href: '#' },
-  { name: 'Hospitality', href: '#' },
+  { name: 'Hospitality', href: 'http://www.glutenfreehospitality.com', target: '_blank' },
   { name: 'Blog', href: '#' },
 ]
 
@@ -41,6 +41,7 @@ export default function Example() {
             <a
               key={item.name}
               href={item.href}
+              target={item.target ? item.target : '_self'}
               className='text-sm font-semibold leading-6 text-gray-900'>
               {item.name}
             </a>
