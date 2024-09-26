@@ -69,27 +69,25 @@ export default function Home() {
     <>
       <Header />
 
-      <section className='w-full'>
-        <div className='relative w-full h-screen'>
-          <Image src={Meal} layout='fill' objectFit='cover' alt='meal' />
-        </div>
+      <section
+        className='w-full h-screen-1/2 flex'
+        style={{
+          backgroundImage: `url('/images/gf-meal.jpg')`,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed',
+        }}>
+        <div className='overlay w-full h-screen-1/2 bg-black opacity-50 absolute' />
         <div
-          className='absolute top-1/3 left-0 right-0 max-w-4xl mx-auto shadow-xl rounded-xl p-10 z-20'
-          style={{ backgroundColor: 'rgb(255 255 255 / 90%)' }}>
-          <h1 className={`${permanentMarker.className} text-4xl text-center`}>
+          className='max-w-4xl mx-auto p-10 absolute z-20 left-0 right-0 mt-10'
+        >
+          <h1
+            className={`${permanentMarker.className} text-white text-4xl text-center`}>
             Explore Thailand&apos;s best gluten-free restaurants
           </h1>
-          <div className='container mx-auto p-4'>
-            <h1 className='text-2xl font-bold mb-4'>Google Maps Example</h1>
-            <GoogleMaps
-              apiKey={`${process.env.NEXT_PUBLIC_GOOGLE_MAPS}`}
-              center={{ lat: 40.7128, lng: -74.006 }} // New York City coordinates
-              zoom={12}
-            />
-          </div>
-          <div className='rounded-xl bg-white w-full flex justify-between shadow-xl p-10 mt-2'>
+          <div className='rounded-xl w-full flex justify-between p-10 mt-2'>
             <div className='flex items-center'>
-              <MapPinIcon aria-hidden='true' className='h-6 w-6' />
+              <MapPinIcon aria-hidden='true' className='h-6 w-6 text-white' />
               <Select
                 options={neighborhoodOptions}
                 className='focus:outline-none min-w-36 ml-4'
@@ -105,7 +103,17 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className='bg-white max-w-4xl mx-auto rounded-xl shadow-xl p-10 z-30 relative'>
+      <section>
+        {' '}
+        <div className='max-w-4xl py-20 mx-auto p-4'>
+          <GoogleMaps
+            apiKey={`${process.env.NEXT_PUBLIC_GOOGLE_MAPS}`}
+            center={{ lat: 13.741791324540523, lng: 100.55651768641842 }}
+            zoom={12}
+          />
+        </div>
+      </section>
+      <section className='bg-white max-w-4xl mx-auto rounded-xl shadow-xl p-10'>
         <h2 className={`${permanentMarker.className} text-4xl`}>Trending</h2>
       </section>
     </>
