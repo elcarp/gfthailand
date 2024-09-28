@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react'
 import Header from '~components/header'
 
-export default function Manager() {
-  const [restaurants, setRestaurants] = useState([])
+export default function Manager(): any {
+  const [restaurants, setRestaurants] = useState<any>()
 
   useEffect(() => {
     async function fetchRestaurants() {
@@ -18,7 +18,7 @@ export default function Manager() {
     fetchRestaurants()
   }, [])
   console.log(restaurants)
-  const restaurantsList = restaurants.data
+  const restaurantsList = restaurants && restaurants.data
 
   return (
     <>
