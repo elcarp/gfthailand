@@ -79,7 +79,7 @@ export default function Home() {
         <div className='overlay w-full h-screen lg:h-screen-1/2 bg-black opacity-50 absolute' />
         <div className='max-w-4xl mx-auto p-10 absolute z-20 left-0 right-0'>
           <h1
-            className={`text-white text-4xl text-center font-black leading-12`}>
+            className={`text-white text-4xl text-center leading-12`}>
             Explore Thailand&apos;s best{' '}
             <span
               className={`${permanentMarker.className} clear-both block text-7xl`}
