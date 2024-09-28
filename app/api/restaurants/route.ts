@@ -1,7 +1,7 @@
 import { kv } from '@vercel/kv'
 import { NextResponse } from 'next/server'
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     // Get all keys
     const keys = await kv.keys('*')
