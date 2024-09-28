@@ -118,7 +118,7 @@ export default function Home() {
         </div>
       </section>
       <section>
-        <RestaurantList /> Restaurants!
+        {/* <RestaurantList /> Restaurants! */}
       </section>
       <section className='bg-white max-w-4xl mx-auto rounded-xl shadow-xl p-10'>
         <h2 className={`${permanentMarker.className} text-4xl`}>Trending</h2>
