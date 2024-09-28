@@ -5,6 +5,7 @@ import { MapPinIcon } from '@heroicons/react/24/outline'
 import Select from 'react-select'
 import { Permanent_Marker } from 'next/font/google'
 import GoogleMaps from '~components/maps'
+import RestaurantList from '~components/restaurants'
 
 const permanentMarker = Permanent_Marker({
   weight: '400',
@@ -77,12 +78,13 @@ export default function Home() {
         }}>
         <div className='overlay w-full h-screen lg:h-screen-1/2 bg-black opacity-50 absolute' />
         <div className='max-w-4xl mx-auto p-10 absolute z-20 left-0 right-0'>
-          <h1 className={`text-white text-4xl text-center font-black leading-12`}>
+          <h1
+            className={`text-white text-4xl text-center font-black leading-12`}>
             Explore Thailand&apos;s best{' '}
             <span
               className={`${permanentMarker.className} clear-both block text-7xl`}
               // style={{ fontSize: 'inherit' }}
-              >
+            >
               gluten-free
             </span>{' '}
             restaurants
@@ -114,6 +116,9 @@ export default function Home() {
             zoom={12}
           />
         </div>
+      </section>
+      <section>
+        <RestaurantList /> Restaurants!
       </section>
       <section className='bg-white max-w-4xl mx-auto rounded-xl shadow-xl p-10'>
         <h2 className={`${permanentMarker.className} text-4xl`}>Trending</h2>
