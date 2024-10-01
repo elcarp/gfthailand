@@ -9,7 +9,7 @@ export default function Manager(): any {
 
   useEffect(() => {
     async function fetchRestaurants() {
-      const response = await fetch('/api/restaurants')
+      const response = await fetch('/api/get-restaurant')
       if (response.ok) {
         const data = await response.json()
         setRestaurants(data)
@@ -20,7 +20,7 @@ export default function Manager(): any {
   }, [])
   console.log(restaurants)
 
-  const restaurantsList = restaurants && restaurants.data
+  const restaurantsList = restaurants && restaurants.restaurants
 
   const id = restaurantName && restaurantName.replace(/ /g, '-').toLowerCase()
   
@@ -103,7 +103,7 @@ export default function Manager(): any {
                   <tbody className='divide-y divide-gray-200'>
                     {restaurantsList &&
                       restaurantsList.map(
-                        ({ value: { name, neighborhood, tags } }: any) => (
+                        ({  name, neighborhood, tags  }: any) => (
                           <tr key={name}>
                             <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0'>
                               {name}
