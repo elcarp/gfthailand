@@ -92,19 +92,19 @@ export default function ProtectedContent(): any {
     tags.map(({ value }: any) => {
       return value
     })
-  const restaurantData = {
-    name: restaurantName,
-    id: id,
-    neighborhood: neighborhood,
-    address: '',
-    coordinates: {
-      latitude: latitude,
-      longitude: longitude,
-    },
-    tags: tagValues,
-  }
-  console.log(restaurantData, 'form data')
+
   const handleSubmit = async () => {
+    const restaurantData = {
+      name: restaurantName,
+      id: id,
+      neighborhood: neighborhood?.value,
+      address: '',
+      coordinates: {
+        latitude: latitude,
+        longitude: longitude,
+      },
+      tags: tagValues,
+    }
     await fetch('/api/add-restaurant', {
       body: JSON.stringify(restaurantData) as any,
       method: 'POST',
@@ -114,7 +114,8 @@ export default function ProtectedContent(): any {
 
   const handleDelete = async () => {
     try {
-      const response = await fetch(`/api/delete-restaurant?id=${deleteId}`, {
+      const encodedId = encodeURIComponent(deleteId)
+      const response = await fetch(`/api/delete-restaurant?id=${encodedId}`, {
         method: 'DELETE',
       })
 
@@ -250,11 +251,11 @@ export default function ProtectedContent(): any {
                             <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0'>
                               {name}
                             </td>
-                            <td className='whitespace-nowrap px-3 py-4 text-sm text-gray-500'>
+                            <td className='capitalize whitespace-nowrap px-3 py-4 text-sm text-gray-500'>
                               {neighborhood}
                             </td>
                             <td className='whitespace-nowrap px-3 py-4 text-sm text-gray-500'>
-                              {tags.map((tag: string) => {
+                              {tags && tags.map((tag: string) => {
                                 return (
                                   <>
                                     <span className='capitalize mx-2 inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10'>

@@ -10,7 +10,10 @@ export async function DELETE(request: Request) {
   }
 
   try {
-    const key = `restaurant:${id}`
+    // Decode the ID to handle special characters
+    const decodedId = decodeURIComponent(id)
+    const key = `restaurant:${decodedId}`
+
     const exists = await kv.exists(key)
 
     if (!exists) {
@@ -23,7 +26,7 @@ export async function DELETE(request: Request) {
   } catch (error) {
     console.error('Error deleting restaurant:', error)
     return NextResponse.json(
-      { success: false, message: 'Failed to delete restaurant' },
+      { success: false, message: 'Failed to delete restaurant', error: (error as Error).message },
       { status: 500 }
     )
   }
