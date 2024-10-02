@@ -11,6 +11,7 @@ export default function ProtectedContent(): any {
   const [latitude, setLatitude] = useState<number>()
   const [longitude, setLongitude] = useState<number>()
   const [tags, setTags] = useState<any>()
+  const [deleteId, setDeleteId] = useState<any>()
 
   const neighborhoodOptions = [
     {
@@ -81,7 +82,7 @@ export default function ProtectedContent(): any {
 
     fetchRestaurants()
   }, [])
-  console.log(restaurants)
+  console.log(restaurants, 'all restaurants')
 
   const restaurantsList = restaurants && restaurants.restaurants
 
@@ -92,27 +93,39 @@ export default function ProtectedContent(): any {
       return value
     })
   const restaurantData = {
-    name: { restaurantName },
-    id: { id },
-    neighborhood: { neighborhood },
-    address:
-      'เลขที่ 651,653,655,657 661 บ้านสีลม ห้องเลขที่ A26 ชั้นที่ 01 663 Si Lom Rd, Silom, Bang Rak, Bangkok 10500',
+    name: restaurantName,
+    id: id,
+    neighborhood: neighborhood,
+    address: '',
     coordinates: {
-      latitude: { latitude },
-      longitude: { longitude },
+      latitude: latitude,
+      longitude: longitude,
     },
-    tags: [tagValues],
+    tags: tagValues,
   }
-  console.log(restaurantData)
+  console.log(restaurantData, 'form data')
   const handleSubmit = async () => {
-    // event.preventDefault()
-
     await fetch('/api/add-restaurant', {
-      // body: JSONdata,
-
+      body: JSON.stringify(restaurantData) as any,
       method: 'POST',
     })
     console.log('submitted!')
+  }
+
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(`/api/delete-restaurant?id=${deleteId}`, {
+        method: 'DELETE',
+      })
+
+      const result = await response.json()
+
+      if (response.ok) {
+        console.log('deleted!')
+      }
+    } catch (error) {
+      console.log('Failed to delete restaurant')
+    }
   }
   return (
     <>
@@ -265,6 +278,23 @@ export default function ProtectedContent(): any {
                       )}
                   </tbody>
                 </table>
+              </div>
+              <div className='max-w-4xl mx-auto grid grid-cols-2 mt-20 gap-4'>
+                <input
+                  value={deleteId}
+                  className='block w-full px-4 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+                  placeholder='delete'
+                  onChange={({ target }) => setDeleteId(target.value)}
+                />
+
+                <div>
+                  <button
+                    type='button'
+                    onClick={() => handleDelete()}
+                    className='rounded-md bg-pomelo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-pomelo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pomelo-600'>
+                    Delete restaurant
+                  </button>
+                </div>
               </div>
             </div>
           </div>
