@@ -7,7 +7,7 @@ import Header from '~components/header'
 export default function ProtectedContent(): any {
   const [restaurants, setRestaurants] = useState<any>()
   const [restaurantName, setRestaurantName] = useState<string>()
-  const [neighborhood, setNeighborhood] = useState<string>()
+  const [neighborhood, setNeighborhood] = useState<any>()
   const [latitude, setLatitude] = useState<number>()
   const [longitude, setLongitude] = useState<number>()
   const [tags, setTags] = useState<any>()
@@ -152,7 +152,7 @@ export default function ProtectedContent(): any {
               className='text-sm text-gray-900 placeholder:text-gray-400'
               placeholder='Select Neighborhood'
               value={neighborhood}
-              onChange={(selected) => setNeighborhood(selected as any)}
+              onChange={(selected) => setNeighborhood(selected?.value as any)}
             />
           </div>
           <div>
