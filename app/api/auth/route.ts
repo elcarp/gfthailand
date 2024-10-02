@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 
-const CORRECT_PASSWORD = process.env.NEXT_PUBLIC_PASSWORD
+const CORRECT_PASSWORD = process.env.AUTH_PASSWORD
 
 export async function POST(request: Request) {
   const { password } = await request.json()
