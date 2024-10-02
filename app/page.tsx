@@ -50,6 +50,10 @@ export default function Home() {
       label: 'Ari',
       value: 'ari',
     },
+    {
+      label: 'Siam',
+      value: 'Siam',
+    },
   ]
   const cuisineOptions = [
     { label: 'italian', value: 'italian' },
