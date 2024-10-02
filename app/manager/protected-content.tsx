@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import Select from 'react-select'
 import Header from '~components/header'
@@ -13,6 +14,11 @@ export default function ProtectedContent(): any {
   const [tags, setTags] = useState<any>()
   const [deleteId, setDeleteId] = useState<any>()
   const [showDeleteModal, setShowDeleteModal] = useState<any>()
+  const [showAddModal, setShowAddModal] = useState<any>()
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const router = useRouter()
 
   const neighborhoodOptions = [
     {
@@ -72,15 +78,21 @@ export default function ProtectedContent(): any {
     { label: 'plant-based', value: 'plant-based' },
   ]
 
-  useEffect(() => {
-    async function fetchRestaurants() {
+  const fetchRestaurants = async () => {
+    try {
       const response = await fetch('/api/get-restaurant')
-      if (response.ok) {
-        const data = await response.json()
-        setRestaurants(data)
+      if (!response.ok) {
+        throw new Error('Failed to fetch restaurants')
       }
+      const data = await response.json()
+      setRestaurants(data)
+    } catch (error) {
+      console.error('Error fetching restaurants:', error)
+      setError('Failed to fetch restaurants. Please try again.')
     }
+  }
 
+  useEffect(() => {
     fetchRestaurants()
   }, [])
   console.log(restaurants, 'all restaurants')
@@ -95,7 +107,7 @@ export default function ProtectedContent(): any {
       return value
     })
 
-  const handleSubmit = async () => {
+  const handleAddRestaurant = async () => {
     const restaurantData = {
       name: restaurantName,
       id: id,
@@ -107,12 +119,43 @@ export default function ProtectedContent(): any {
       },
       tags: tagValues,
     }
-    await fetch('/api/add-restaurant', {
-      body: JSON.stringify(restaurantData) as any,
-      method: 'POST',
-    })
-    console.log('submitted!')
+    try {
+      const response = await fetch('/api/add-restaurant', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(restaurantData),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to add restaurant')
+      }
+
+      console.log('Restaurant added successfully!')
+
+      // Clear the form
+      setRestaurantName('')
+      // setId('')
+      setNeighborhood({ value: '' })
+      setLatitude(0)
+      setLongitude(0)
+      // setTagValues([])
+
+      // Refresh the list of restaurants
+      await fetchRestaurants()
+
+      // Optionally, you can use Next.js router to refresh the page or navigate to the restaurant list
+      router.refresh()
+    } catch (error) {
+      console.error('Error adding restaurant:', error)
+      setError('Failed to add restaurant. Please try again.')
+    } finally {
+      setIsLoading(false)
+      setShowAddModal(false)
+    }
   }
+
   function handleDeleteModal(id: any) {
     setShowDeleteModal(true)
     setDeleteId(id)
@@ -140,12 +183,13 @@ export default function ProtectedContent(): any {
       console.log('Failed to delete restaurant')
     }
   }
+
   return (
     <>
       <div
         className={`${
           showDeleteModal == true ? 'block' : 'hidden'
-        } bg-white absolute rounded-xl p-10 top-1/2 left-0 right-0 mx-auto w-1/3 z-50 shadow-xl`}>
+        } bg-white absolute rounded-xl p-10 top-1/3 left-0 right-0 mx-auto w-1/3 z-50 shadow-xl`}>
         <span className='block text-center'>Are you sure?</span>
         <div className='flex mt-5 justify-center w-full'>
           {' '}
@@ -163,9 +207,10 @@ export default function ProtectedContent(): any {
           </button>
         </div>
       </div>
-
-      <Header />
-      <section className='py-20'>
+      <div
+        className={`${
+          showAddModal == true ? 'block' : 'hidden'
+        } bg-white absolute rounded-xl p-10 top-1/4 left-0 right-0 mx-auto max-w-4xl z-50 shadow-xl`}>
         <div className='max-w-4xl mx-auto py-10 grid grid-cols-2 gap-4'>
           <div>
             <label htmlFor='email' className='sr-only'>
@@ -230,6 +275,25 @@ export default function ProtectedContent(): any {
             />
           </div>
         </div>
+        <div className='flex mt-5 justify-center w-full'>
+          {' '}
+          <button
+            type='button'
+            onClick={() => setShowAddModal(false)}
+            className='mx-2 block rounded-md transparent px-3 py-2 text-center text-sm font-semibold text-pomelo-600 hover:text-white shadow-sm hover:bg-pomelo-600 border-pomelo-600 border focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pomelo-600'>
+            Cancel
+          </button>
+          <button
+            type='button'
+            onClick={() => handleAddRestaurant()}
+            className='mx-2 block rounded-md bg-pomelo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-pomelo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pomelo-600'>
+            Submit
+          </button>
+        </div>
+      </div>
+
+      <Header />
+      <section className='py-20'>
         <div className='px-4 sm:px-6 lg:px-8 container mx-auto'>
           <div className='sm:flex sm:items-center'>
             <div className='sm:flex-auto'>
@@ -243,7 +307,7 @@ export default function ProtectedContent(): any {
             <div className='mt-4 sm:ml-16 sm:mt-0 sm:flex-none'>
               <button
                 type='button'
-                onClick={() => handleSubmit()}
+                onClick={() => setShowAddModal(true)}
                 className='block rounded-md bg-pomelo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-pomelo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pomelo-600'>
                 Add restaurant
               </button>
