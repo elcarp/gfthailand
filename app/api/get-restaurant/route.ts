@@ -14,18 +14,30 @@ export async function GET(request: Request) {
       })
     )
 
-    return NextResponse.json({
-      success: true,
-      restaurants,
-      headers: {
-        'Cache-Control': 'no-store, max-age=0',
-      },
-    })
+    return NextResponse.json(
+      { success: true, restaurants },
+      {
+        headers: {
+          'Cache-Control': 'no-store, max-age=0',
+          'Surrogate-Control': 'no-store',
+          'Pragma': 'no-cache',
+          'Expires': '0',
+        },
+      }
+    )
   } catch (error) {
     console.error('Error fetching restaurants:', error)
     return NextResponse.json(
       { success: false, message: 'Failed to fetch restaurants' },
-      { status: 500 }
+      { 
+        status: 500,
+        headers: {
+          'Cache-Control': 'no-store, max-age=0',
+          'Surrogate-Control': 'no-store',
+          'Pragma': 'no-cache',
+          'Expires': '0',
+        },
+      }
     )
   }
 }

@@ -8,7 +8,16 @@ export async function POST(request: Request) {
     if (!body || !body.id || typeof body.id !== 'string') {
       return NextResponse.json(
         { success: false, message: 'Invalid or missing restaurant ID' },
-        { status: 400 }
+        {
+          status: 400,
+          headers: {
+            'Cache-Control':
+              'no-store, no-cache, must-revalidate, proxy-revalidate',
+            Pragma: 'no-cache',
+            Expires: '0',
+            'Surrogate-Control': 'no-store',
+          },
+        }
       )
     }
 
@@ -16,15 +25,35 @@ export async function POST(request: Request) {
 
     await kv.hset(`restaurant:${id}`, restaurantData)
 
-    return NextResponse.json({
-      success: true,
-      message: 'Restaurant data added successfully',
-    })
+    return NextResponse.json(
+      {
+        success: true,
+        message: 'Restaurant data added successfully',
+      },
+      {
+        headers: {
+          'Cache-Control':
+            'no-store, no-cache, must-revalidate, proxy-revalidate',
+          Pragma: 'no-cache',
+          Expires: '0',
+          'Surrogate-Control': 'no-store',
+        },
+      }
+    )
   } catch (error) {
     console.error('Error adding restaurant data:', error)
     return NextResponse.json(
       { success: false, message: 'Failed to add restaurant data' },
-      { status: 500 }
+      {
+        status: 500,
+        headers: {
+          'Cache-Control':
+            'no-store, no-cache, must-revalidate, proxy-revalidate',
+          Pragma: 'no-cache',
+          Expires: '0',
+          'Surrogate-Control': 'no-store',
+        },
+      }
     )
   }
 }
