@@ -95,8 +95,11 @@ export default function ProtectedContent(): any {
   useEffect(() => {
     fetchRestaurants()
   }, [])
+  
 
   const restaurantsList = restaurants && restaurants.restaurants
+
+  console.log(restaurantsList)
 
   const id = restaurantName && restaurantName.replace(/ /g, '-').toLowerCase()
   const tagValues =
