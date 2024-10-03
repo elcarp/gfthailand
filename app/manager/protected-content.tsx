@@ -4,6 +4,10 @@ import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import Select from 'react-select'
 import Header from '~components/header'
+import useSWR from 'swr'
+
+const fetcher = (url: string | URL | Request) =>
+  fetch(url).then((res) => res.json())
 
 export default function ProtectedContent(): any {
   const [restaurants, setRestaurants] = useState<any>()
@@ -20,6 +24,13 @@ export default function ProtectedContent(): any {
 
   const router = useRouter()
 
+  const { data } = useSWR('/api/get-restaurant', fetcher, {
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+    refreshInterval: 1000, // Revalidate every second
+  })
+
+  console.log(data, 'from swr')
   const neighborhoodOptions = [
     {
       label: 'Sukhumvit',
@@ -78,24 +89,13 @@ export default function ProtectedContent(): any {
     { label: 'plant-based', value: 'plant-based' },
   ]
 
-  const fetchRestaurants = async () => {
-    try {
-      const response = await fetch('/api/get-restaurant')
-      if (!response.ok) {
-        throw new Error('Failed to fetch restaurants')
-      }
-      const data = await response.json()
-      setRestaurants(data)
-    } catch (error) {
-      console.error('Error fetching restaurants:', error)
-      setError('Failed to fetch restaurants. Please try again.')
-    }
-  }
-
   useEffect(() => {
-    fetchRestaurants()
-  }, [])
-  
+    if (data) {
+      setRestaurants(data)
+    }
+  }, [data])
+
+  console.log(restaurants, 'restau')
 
   const restaurantsList = restaurants && restaurants.restaurants
 
@@ -144,7 +144,7 @@ export default function ProtectedContent(): any {
       // setTagValues([])
 
       // Refresh the list of restaurants
-      await fetchRestaurants()
+      // await fetchRestaurants()
 
       // Optionally, you can use Next.js router to refresh the page or navigate to the restaurant list
       router.refresh()
