@@ -95,8 +95,6 @@ export default function ProtectedContent(): any {
   useEffect(() => {
     fetchRestaurants()
   }, [])
-  console.log(restaurants, 'all restaurants')
-  console.log(deleteId, 'deleteid')
 
   const restaurantsList = restaurants && restaurants.restaurants
 
