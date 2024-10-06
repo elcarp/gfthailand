@@ -14,27 +14,35 @@ export async function GET(request: Request) {
       })
     )
 
+    // Add a timestamp to the response
+    const timestamp = new Date().toISOString()
+
     return NextResponse.json(
-      { success: true, restaurants },
+      { success: true, restaurants, timestamp },
       {
         headers: {
-          'Cache-Control': 'max-age=10',
-          'CDN-Cache-Control': 'max-age=10',
-          'Vercel-CDN-Cache-Control': 'max-age=10',
+          'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+          'CDN-Cache-Control': 'no-store',
+          'Vercel-CDN-Cache-Control': 'no-store',
+          'Surrogate-Control': 'no-store',
+          'Pragma': 'no-cache',
+          'Expires': '0',
         },
       }
     )
   } catch (error) {
     console.error('Error fetching restaurants:', error)
     return NextResponse.json(
-      { success: false, message: 'Failed to fetch restaurants' },
+      { success: false, message: 'Failed to fetch restaurants', error: (error as Error).message },
       {
         status: 500,
         headers: {
-          'Cache-Control': 'no-store, max-age=0',
+          'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+          'CDN-Cache-Control': 'no-store',
+          'Vercel-CDN-Cache-Control': 'no-store',
           'Surrogate-Control': 'no-store',
-          Pragma: 'no-cache',
-          Expires: '0',
+          'Pragma': 'no-cache',
+          'Expires': '0',
         },
       }
     )
