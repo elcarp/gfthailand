@@ -18,10 +18,9 @@ export async function GET(request: Request) {
       { success: true, restaurants },
       {
         headers: {
-          'Cache-Control': 'no-store, max-age=0',
-          'Surrogate-Control': 'no-store',
-          'Pragma': 'no-cache',
-          'Expires': '0',
+          'Cache-Control': 'max-age=10',
+          'CDN-Cache-Control': 'max-age=10',
+          'Vercel-CDN-Cache-Control': 'max-age=10',
         },
       }
     )
@@ -29,13 +28,13 @@ export async function GET(request: Request) {
     console.error('Error fetching restaurants:', error)
     return NextResponse.json(
       { success: false, message: 'Failed to fetch restaurants' },
-      { 
+      {
         status: 500,
         headers: {
           'Cache-Control': 'no-store, max-age=0',
           'Surrogate-Control': 'no-store',
-          'Pragma': 'no-cache',
-          'Expires': '0',
+          Pragma: 'no-cache',
+          Expires: '0',
         },
       }
     )
