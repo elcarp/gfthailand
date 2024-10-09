@@ -85,15 +85,15 @@ export default function Home() {
             </span>{' '}
             restaurants
           </h1>
-          <div className='rounded-xl w-full lg:flex justify-between p-10 mt-2'>
-            <div className='flex items-center'>
+          <div className='rounded-xl w-full flex flex-wrap lg:flex-nowrap justify-between p-10 mt-2'>
+            <div className='flex items-center pb-10'>
               <MapPinIcon aria-hidden='true' className='h-6 w-6 text-white' />
               <Select
                 options={neighborhoodOptions}
-                className='focus:outline-none min-w-36 ml-4'
+                className='focus:outline-none w-full min-w-36 ml-4'
               />
             </div>
-            <div className='flex items-center w-full'>
+            <div className='flex items-center pb-10 w-full'>
               <Select
                 options={cuisineOptions}
                 placeholder='Search restaurants...'
