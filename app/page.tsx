@@ -6,6 +6,7 @@ import Select from 'react-select'
 import { Permanent_Marker } from 'next/font/google'
 import GoogleMaps from '~components/maps'
 import RestaurantList from '~components/restaurants'
+import { cuisines } from '~constants'
 
 const permanentMarker = Permanent_Marker({
   weight: '400',
@@ -55,19 +56,10 @@ export default function Home() {
       value: 'Siam',
     },
   ]
-  const cuisineOptions = [
-    { label: 'italian', value: 'italian' },
-    { label: 'chinese', value: 'chinese' },
-    { label: 'indian', value: 'indian' },
-    { label: 'japanese', value: 'japanese' },
-    { label: 'mexican', value: 'mexican' },
-    { label: 'thai', value: 'thai' },
-    { label: 'french', value: 'french' },
-    { label: 'greek', value: 'greek' },
-    { label: 'lebanese', value: 'lebanese' },
-    { label: 'spanish', value: 'spanish' },
-  ]
 
+  const cuisineOptions = cuisines.map((cuisine) => {
+    return { label: cuisine, value: cuisine }
+  })
   return (
     <>
       <Header />
