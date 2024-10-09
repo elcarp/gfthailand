@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import Select from 'react-select'
 import Header from '~components/header'
 import useSWR from 'swr'
+import { cuisines } from '~constants'
 
 const fetcher = (url: string | URL | Request) =>
   fetch(url).then((res) => res.json())
@@ -73,22 +74,11 @@ export default function ProtectedContent(): any {
       value: 'Siam',
     },
   ]
-  const cuisineOptions = [
-    { label: 'italian', value: 'italian' },
-    { label: 'chinese', value: 'chinese' },
-    { label: 'indian', value: 'indian' },
-    { label: 'japanese', value: 'japanese' },
-    { label: 'mexican', value: 'mexican' },
-    { label: 'thai', value: 'thai' },
-    { label: 'french', value: 'french' },
-    { label: 'greek', value: 'greek' },
-    { label: 'lebanese', value: 'lebanese' },
-    { label: 'spanish', value: 'spanish' },
-    { label: 'western', value: 'western' },
-    { label: 'vegan', value: 'vegan' },
-    { label: 'plant-based', value: 'plant-based' },
-  ]
 
+  const cuisineOptions = cuisines.map((cuisine) => {
+    return { label: cuisine, value: cuisine }
+  })
+  
   useEffect(() => {
     if (data) {
       setRestaurants(data)

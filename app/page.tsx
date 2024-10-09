@@ -60,6 +60,7 @@ export default function Home() {
   const cuisineOptions = cuisines.map((cuisine) => {
     return { label: cuisine, value: cuisine }
   })
+  
   return (
     <>
       <Header />
