@@ -174,7 +174,22 @@ export default function ProtectedContent(): any {
       console.log('Failed to delete restaurant')
     }
   }
+  const purgeAllCache = async () => {
+    try {
+      // Purge server-side cache
+      await fetch(`/api/purge-cache?secret=${process.env.NEXT_PUBLIC_CACHE_PURGE_TOKEN}`, {
+        method: 'POST',
+      })
 
+      // Purge CDN cache
+      await fetch(`/api/purge-cdn-cache?secret=${process.env.NEXT_PUBLIC_CACHE_PURGE_TOKEN}`, {
+        method: 'POST',
+      })
+
+    } catch (error) {
+      console.error('Error purging cache:', error)
+    }
+  }
   return (
     <>
       <div
@@ -375,6 +390,7 @@ export default function ProtectedContent(): any {
                       )}
                   </tbody>
                 </table>
+                <button onClick={purgeAllCache}>Purge All Cache and Refresh</button>
               </div>
             </div>
           </div>
