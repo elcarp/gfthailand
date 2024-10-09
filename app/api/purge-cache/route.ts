@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 export async function POST(request: NextRequest) {
   const secret = request.nextUrl.searchParams.get('secret')
   
-  if (secret !== process.env.CACHE_PURGE_TOKEN) {
+  if (secret !== process.env.NEXT_PUBLIC_CACHE_PURGE_TOKEN) {
     return NextResponse.json({ message: 'Invalid token' }, { status: 401 })
   }
   
