@@ -3,8 +3,20 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(request: NextRequest) {
   const secret = request.nextUrl.searchParams.get('secret')
 
-  if (secret !== process.env.CACHE_PURGE_TOKEN) {
+  if (secret !== process.env.NEXT_PUBLIC_CACHE_PURGE_TOKEN) {
     return NextResponse.json({ message: 'Invalid token' }, { status: 401 })
+  }
+
+  if (
+    !process.env.VERCEL_PROJECT_ID ||
+    !process.env.VERCEL_TEAM_ID ||
+    !process.env.VERCEL_API_TOKEN
+  ) {
+    console.error('Missing required environment variables for CDN cache purge')
+    return NextResponse.json(
+      { message: 'Server configuration error' },
+      { status: 500 }
+    )
   }
 
   try {
@@ -23,6 +35,11 @@ export async function POST(request: NextRequest) {
     )
 
     if (!response.ok) {
+      const errorText = await response.text()
+      console.error(
+        `Failed to purge CDN cache: ${response.status} ${response.statusText}`,
+        errorText
+      )
       throw new Error(`Failed to purge CDN cache: ${response.statusText}`)
     }
 
