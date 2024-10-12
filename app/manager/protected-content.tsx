@@ -23,7 +23,7 @@ export default function ProtectedContent(): JSX.Element {
 
   const fetchRestaurants = async () => {
     try {
-      const response = await fetch('/api/get-restaurant')
+      const response = await fetch('/api/get-restaurant', { cache: 'no-store' })
       if (!response.ok) {
         throw new Error('Failed to fetch restaurants')
       }
@@ -77,6 +77,7 @@ export default function ProtectedContent(): JSX.Element {
     try {
       setIsLoading(true)
       const response = await fetch('/api/add-restaurant', {
+        cache: 'no-store',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -119,6 +120,7 @@ export default function ProtectedContent(): JSX.Element {
     try {
       const encodedId = encodeURIComponent(deleteId)
       const response = await fetch(`/api/delete-restaurant?id=${encodedId}`, {
+        cache: 'no-store',
         method: 'DELETE',
       })
 

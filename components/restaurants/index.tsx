@@ -7,7 +7,7 @@ export default function RestaurantList() {
 
   useEffect(() => {
     async function fetchRestaurants() {
-      const response = await fetch('/api/restaurants')
+      const response = await fetch('/api/restaurants', { cache: 'no-store' })
       if (response.ok) {
         const data = await response.json()
         setRestaurants(data)
