@@ -140,31 +140,6 @@ export default function ProtectedContent(): JSX.Element {
     }
   }
 
-  const purgeAllCache = async () => {
-    try {
-      // Purge server-side cache
-      await fetch(
-        `/api/purge-cache?secret=${process.env.NEXT_PUBLIC_CACHE_PURGE_TOKEN}`,
-        {
-          method: 'POST',
-        }
-      )
-
-      // Purge CDN cache
-      await fetch(
-        `/api/purge-cdn-cache?secret=${process.env.NEXT_PUBLIC_CACHE_PURGE_TOKEN}`,
-        {
-          method: 'POST',
-        }
-      )
-
-      // Refresh the list of restaurants
-      await fetchRestaurants()
-    } catch (error) {
-      console.error('Error purging cache:', error)
-      setError('Failed to purge cache. Please try again.')
-    }
-  }
 
   return (
     <>
@@ -362,11 +337,6 @@ export default function ProtectedContent(): JSX.Element {
                       )}
                   </tbody>
                 </table>
-                {/* <button
-                  onClick={purgeAllCache}
-                  className='mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors'>
-                  Purge All Cache and Refresh
-                </button> */}
                 <button className='mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors' onClick={fetchRestaurants}>Refresh Data</button>
               </div>
             </div>
