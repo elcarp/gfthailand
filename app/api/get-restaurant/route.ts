@@ -1,6 +1,10 @@
 import { kv } from '@vercel/kv'
 import { NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+export const fetchCache = 'force-no-store'
+export const revalidate = 0
+
 export async function GET(request: Request) {
   try {
     // Get all keys that start with 'restaurant:'
@@ -21,14 +25,9 @@ export async function GET(request: Request) {
       { success: true, restaurants, timestamp },
       {
         headers: {
-          cache: 'no-store',
-          'Cache-Control':
-            'no-store, no-cache, must-revalidate, proxy-revalidate',
+          'Cache-Control': 'no-store, max-age=0',
           'CDN-Cache-Control': 'no-store',
           'Vercel-CDN-Cache-Control': 'no-store',
-          'Surrogate-Control': 'no-store',
-          Pragma: 'no-cache',
-          Expires: '0',
         },
       }
     )
@@ -43,13 +42,9 @@ export async function GET(request: Request) {
       {
         status: 500,
         headers: {
-          'Cache-Control':
-            'no-store, no-cache, must-revalidate, proxy-revalidate',
+          'Cache-Control': 'no-store, max-age=0',
           'CDN-Cache-Control': 'no-store',
           'Vercel-CDN-Cache-Control': 'no-store',
-          'Surrogate-Control': 'no-store',
-          Pragma: 'no-cache',
-          Expires: '0',
         },
       }
     )

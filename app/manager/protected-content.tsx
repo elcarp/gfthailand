@@ -18,20 +18,25 @@ export default function ProtectedContent(): JSX.Element {
   const [showAddModal, setShowAddModal] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [timestamp, setTimestamp] = useState('')
 
   const router = useRouter()
 
   const fetchRestaurants = async () => {
     try {
-      const response = await fetch('/api/get-restaurant', { cache: 'no-store' })
-      if (!response.ok) {
-        throw new Error('Failed to fetch restaurants')
-      }
+      const response = await fetch('/api/get-restaurant', {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+          Pragma: 'no-cache',
+          Expires: '0',
+        },
+      })
       const data = await response.json()
-      setRestaurants(data)
+      setRestaurants(data.restaurants)
+      setTimestamp(data.timestamp)
     } catch (error) {
       console.error('Error fetching restaurants:', error)
-      setError('Failed to fetch restaurants. Please try again.')
     }
   }
 
@@ -56,8 +61,6 @@ export default function ProtectedContent(): JSX.Element {
     label: cuisine,
     value: cuisine,
   }))
-
-  const restaurantsList = restaurants && restaurants.restaurants
 
   const id = restaurantName && restaurantName.replace(/ /g, '-').toLowerCase()
   const tagValues = tags && tags.map(({ value }: any) => value)
@@ -320,8 +323,8 @@ export default function ProtectedContent(): JSX.Element {
                     </tr>
                   </thead>
                   <tbody className='divide-y divide-gray-200'>
-                    {restaurantsList &&
-                      restaurantsList.map(
+                    {restaurants &&
+                      restaurants.map(
                         ({ name, neighborhood, tags, id }: any) => (
                           <tr key={name}>
                             <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0'>
@@ -359,11 +362,12 @@ export default function ProtectedContent(): JSX.Element {
                       )}
                   </tbody>
                 </table>
-                <button
+                {/* <button
                   onClick={purgeAllCache}
                   className='mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors'>
                   Purge All Cache and Refresh
-                </button>
+                </button> */}
+                <button className='mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors' onClick={fetchRestaurants}>Refresh Data</button>
               </div>
             </div>
           </div>
