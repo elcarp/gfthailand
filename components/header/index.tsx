@@ -25,7 +25,7 @@ export default function Example() {
       <nav
         aria-label='Global'
         className='mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8'>
-        <div className='flex lg:flex-1'>
+        <div className='flex' style={{ clipPath: 'circle(42% at 50% 50%)' }}>
           <a href='/' className='-m-1.5 p-1.5'>
             <Image alt='' src={logo} className='h-16 w-auto' />
           </a>
@@ -39,7 +39,7 @@ export default function Example() {
             <Bars3Icon aria-hidden='true' className='h-6 w-6' />
           </button>
         </div>
-        <div className='hidden lg:flex lg:gap-x-12'>
+        <div className='hidden lg:flex lg:gap-x-12 lg:justify-center' style={{width: '80%'}}>
           {navigation.map((item) => (
             <a
               key={item.name}
@@ -51,7 +51,9 @@ export default function Example() {
           ))}
         </div>
         <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
-          <a href='/manager' className='text-sm font-semibold leading-6 text-white'>
+          <a
+            href='/manager'
+            className='text-sm font-semibold leading-6 text-white'>
             Log in <span aria-hidden='true'>&rarr;</span>
           </a>
         </div>
