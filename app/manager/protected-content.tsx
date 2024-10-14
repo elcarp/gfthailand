@@ -118,6 +118,7 @@ export default function ProtectedContent(): JSX.Element {
     setShowDeleteModal(true)
     setDeleteId(id)
   }
+  console.log(deleteId, 'deleteId?')
 
   const handleDelete = async () => {
     try {

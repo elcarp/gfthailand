@@ -12,7 +12,9 @@ export async function DELETE(request: Request) {
   try {
     // Decode the ID to handle special characters
     const decodedId = decodeURIComponent(id)
-    const key = `restaurant:${decodedId}`
+    // const key = `restaurant:${decodedId}`
+    const key = `restaurant:${id}`
+
 
     const exists = await kv.exists(key)
 
