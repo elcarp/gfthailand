@@ -142,7 +142,13 @@ export default function Home() {
         <h2 className={`${permanentMarker.className} text-4xl`}>Trending</h2>
         <div className='grid grid-cols-3 gap-4'>
           {restaurants.map(({ name }) => {
-            return <div className='rounded-xl shadow-xl p-3 flex items-center'>{name}</div>
+            return (
+              <div
+                key={name}
+                className='rounded-xl shadow-xl p-3 flex items-center'>
+                {name}
+              </div>
+            )
           })}
         </div>
       </section>
