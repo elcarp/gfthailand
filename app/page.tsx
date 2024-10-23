@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '~components/header'
 import { MapPinIcon } from '@heroicons/react/24/outline'
 import Select from 'react-select'
@@ -60,7 +60,31 @@ export default function Home() {
   const cuisineOptions = cuisines.map((cuisine) => {
     return { label: cuisine, value: cuisine }
   })
-  
+
+  const [restaurants, setRestaurants] = useState([])
+
+  const fetchRestaurants = async () => {
+    try {
+      const response = await fetch('/api/get-restaurant', {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+          Pragma: 'no-cache',
+          Expires: '0',
+        },
+      })
+      const data = await response.json()
+      setRestaurants(data.restaurants)
+    } catch (error) {
+      console.error('Error fetching restaurants:', error)
+    }
+  }
+
+  useEffect(() => {
+    fetchRestaurants()
+  }, [])
+
+  console.log(restaurants)
   return (
     <>
       <Header />
@@ -116,6 +140,11 @@ export default function Home() {
       <section>{/* <RestaurantList /> Restaurants! */}</section>
       <section className='bg-white max-w-4xl mx-auto rounded-xl shadow-xl p-10'>
         <h2 className={`${permanentMarker.className} text-4xl`}>Trending</h2>
+        <div className='grid grid-cols-3 gap-4'>
+          {restaurants.map(({ name }) => {
+            return <div className='rounded-xl shadow-xl p-3 flex items-center'>{name}</div>
+          })}
+        </div>
       </section>
     </>
   )
