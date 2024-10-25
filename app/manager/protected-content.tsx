@@ -9,6 +9,7 @@ import { cuisines } from '~constants'
 export default function ProtectedContent(): JSX.Element {
   const [restaurants, setRestaurants] = useState<any>()
   const [restaurantName, setRestaurantName] = useState<string>('')
+  const [restaurantId, setRestaurantId] = useState<string>('')
   const [neighborhood, setNeighborhood] = useState<any>()
   const [latitude, setLatitude] = useState<number>()
   const [longitude, setLongitude] = useState<number>()
@@ -16,6 +17,7 @@ export default function ProtectedContent(): JSX.Element {
   const [deleteId, setDeleteId] = useState<string>('')
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false)
   const [showAddModal, setShowAddModal] = useState<boolean>(false)
+
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [timestamp, setTimestamp] = useState('')
@@ -114,11 +116,64 @@ export default function ProtectedContent(): JSX.Element {
     }
   }
 
+  function setEdit(restaurantName: string, id: string) {
+    setShowAddModal(true)
+    setRestaurantName(restaurantName)
+    setRestaurantId(id)
+  }
+  const handleEditRestaurant = async (restaurantId: string) => {
+    const restaurantData = {
+      name: restaurantName,
+      id: restaurantId,
+      neighborhood: neighborhood?.value,
+      address: '',
+      coordinates: {
+        latitude: latitude,
+        longitude: longitude,
+      },
+      tags: tagValues,
+    }
+    try {
+      setIsLoading(true)
+      const response = await fetch('/api/add-restaurant', {
+        cache: 'no-store',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(restaurantData),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to add restaurant')
+      }
+
+      console.log('Restaurant added successfully!')
+
+      // Clear the form
+      setRestaurantName('')
+      setNeighborhood({ value: '' })
+      setLatitude(undefined)
+      setLongitude(undefined)
+      setTags(undefined)
+
+      // Refresh the list of restaurants
+      await fetchRestaurants()
+
+      router.refresh()
+    } catch (error) {
+      console.error('Error adding restaurant:', error)
+      setError('Failed to add restaurant. Please try again.')
+    } finally {
+      setIsLoading(false)
+      setShowAddModal(false)
+    }
+  }
+
   function handleDeleteModal(id: string) {
     setShowDeleteModal(true)
     setDeleteId(id)
   }
-  console.log(deleteId, 'deleteId?')
 
   const handleDelete = async () => {
     try {
@@ -140,7 +195,6 @@ export default function ProtectedContent(): JSX.Element {
       setError('Failed to delete restaurant. Please try again.')
     }
   }
-
 
   return (
     <>
@@ -322,6 +376,7 @@ export default function ProtectedContent(): JSX.Element {
                             <td className='relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0'>
                               <a
                                 href='#'
+                                onClick={() => setEdit(name, id)}
                                 className='text-pomelo-600 hover:text-pomelo-900 mx-1'>
                                 Edit
                                 <span className='sr-only'>, {name}</span>
@@ -338,7 +393,11 @@ export default function ProtectedContent(): JSX.Element {
                       )}
                   </tbody>
                 </table>
-                <button className='mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors' onClick={fetchRestaurants}>Refresh Data</button>
+                <button
+                  className='mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors'
+                  onClick={fetchRestaurants}>
+                  Refresh Data
+                </button>
               </div>
             </div>
           </div>
