@@ -66,7 +66,7 @@ export default function ProtectedContent(): JSX.Element {
   }))
 
   const id = restaurantName && restaurantName.replace(/ /g, '-').toLowerCase()
-  const tagValues = tags && tags.map(({ value }: any) => value)
+  const tagValues = tags && tags?.map(({ value }: any) => value)
 
   const handleAddRestaurant = async () => {
     const restaurantData = {
@@ -387,7 +387,7 @@ export default function ProtectedContent(): JSX.Element {
                             </td>
                             <td className='whitespace-nowrap px-3 py-4 text-sm text-gray-500'>
                               {tags &&
-                                tags.map((tag: string) => (
+                                tags?.map((tag: string) => (
                                   <span
                                     key={tag}
                                     className='capitalize mx-2 inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10'>
