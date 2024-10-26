@@ -16,6 +16,7 @@ export default function ProtectedContent(): JSX.Element {
   const [tags, setTags] = useState<any>()
   const [deleteId, setDeleteId] = useState<string>('')
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false)
+  const [editing, setEditing] = useState<boolean>(false)
   const [showAddModal, setShowAddModal] = useState<boolean>(false)
 
   const [isLoading, setIsLoading] = useState(false)
@@ -115,16 +116,42 @@ export default function ProtectedContent(): JSX.Element {
       setShowAddModal(false)
     }
   }
-
-  function setEdit(restaurantName: string, id: string) {
+  function clearForm() {
+    setRestaurantName('')
+    setNeighborhood({ value: '' })
+    setLatitude(undefined)
+    setLongitude(undefined)
+    setTags(undefined)
+    setRestaurantId('')
+    setEditing(false)
+  }
+  function closeModal() {
+    clearForm()
+    setShowAddModal(false)
+  }
+  function setEdit(
+    restaurantName: string,
+    id: string,
+    longitude?: number,
+    latitude?: number,
+    neighborhood?: string,
+    tags?: any
+  ) {
     setShowAddModal(true)
     setRestaurantName(restaurantName)
     setRestaurantId(id)
+    setLongitude(longitude)
+    setLatitude(latitude)
+    setNeighborhood({ value: neighborhood, label: neighborhood })
+    setEditing(true)
+    setTags(tags.map((tag: string) => ({ value: tag, label: tag })))
   }
-  const handleEditRestaurant = async (restaurantId: string) => {
+  console.log(neighborhood, 'neighborhood')
+
+  const handleEditRestaurant = async () => {
     const restaurantData = {
       name: restaurantName,
-      id: restaurantId,
+      id: restaurantId, // Use the existing restaurantId instead of generating a new one
       neighborhood: neighborhood?.value,
       address: '',
       coordinates: {
@@ -135,41 +162,36 @@ export default function ProtectedContent(): JSX.Element {
     }
     try {
       setIsLoading(true)
-      const response = await fetch('/api/add-restaurant', {
+      const response = await fetch('/api/edit-restaurant', { // Change the API endpoint to edit-restaurant
         cache: 'no-store',
-        method: 'POST',
+        method: 'PUT', // Use PUT method for updating
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(restaurantData),
       })
-
+  
       if (!response.ok) {
-        throw new Error('Failed to add restaurant')
+        throw new Error('Failed to edit restaurant')
       }
-
-      console.log('Restaurant added successfully!')
-
+  
+      console.log('Restaurant edited successfully!')
+  
       // Clear the form
-      setRestaurantName('')
-      setNeighborhood({ value: '' })
-      setLatitude(undefined)
-      setLongitude(undefined)
-      setTags(undefined)
-
+      clearForm()
+  
       // Refresh the list of restaurants
       await fetchRestaurants()
-
+  
       router.refresh()
     } catch (error) {
-      console.error('Error adding restaurant:', error)
-      setError('Failed to add restaurant. Please try again.')
+      console.error('Error editing restaurant:', error)
+      setError('Failed to edit restaurant. Please try again.')
     } finally {
       setIsLoading(false)
       setShowAddModal(false)
     }
   }
-
   function handleDeleteModal(id: string) {
     setShowDeleteModal(true)
     setDeleteId(id)
@@ -290,15 +312,15 @@ export default function ProtectedContent(): JSX.Element {
         <div className='flex mt-5 justify-center w-full'>
           <button
             type='button'
-            onClick={() => setShowAddModal(false)}
+            onClick={() => closeModal()}
             className='mx-2 block rounded-md transparent px-3 py-2 text-center text-sm font-semibold text-pomelo-600 hover:text-white shadow-sm hover:bg-pomelo-600 border-pomelo-600 border focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pomelo-600'>
             Cancel
           </button>
           <button
             type='button'
-            onClick={handleAddRestaurant}
+            onClick={editing ? handleEditRestaurant : handleAddRestaurant}
             className='mx-2 block rounded-md bg-pomelo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-pomelo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pomelo-600'>
-            Submit
+            {editing ? 'Update' : 'Submit'}
           </button>
         </div>
       </div>
@@ -376,7 +398,15 @@ export default function ProtectedContent(): JSX.Element {
                             <td className='relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0'>
                               <a
                                 href='#'
-                                onClick={() => setEdit(name, id)}
+                                onClick={() =>
+                                  setEdit(
+                                    name,
+                                    id,
+                                    latitude,
+                                    longitude,
+                                    neighborhood
+                                  )
+                                }
                                 className='text-pomelo-600 hover:text-pomelo-900 mx-1'>
                                 Edit
                                 <span className='sr-only'>, {name}</span>
