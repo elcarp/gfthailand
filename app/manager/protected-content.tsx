@@ -174,7 +174,7 @@ export default function ProtectedContent(): JSX.Element {
 
   const uploadPhotoToBlob = async (file: File) => {
     const filename = encodeURIComponent(file.name)
-    const res = await fetch(`/api/upload-url?file=${filename}`)
+    const res = await fetch(`/api/upload?file=${filename}`)
     const { url, fields } = await res.json()
     const formData = new FormData()
 
