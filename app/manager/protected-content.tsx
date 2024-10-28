@@ -160,7 +160,7 @@ export default function ProtectedContent(): JSX.Element {
     setLatitude(latitude)
     setNeighborhood({ value: neighborhood, label: neighborhood })
     setEditing(true)
-    setTags(tags.map((tag: string) => ({ value: tag, label: tag })))
+    setTags(tags?.map((tag: string) => ({ value: tag, label: tag })))
   }
   console.log(neighborhood, 'neighborhood')
 
