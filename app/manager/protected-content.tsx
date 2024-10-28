@@ -18,6 +18,8 @@ export default function ProtectedContent(): JSX.Element {
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false)
   const [editing, setEditing] = useState<boolean>(false)
   const [showAddModal, setShowAddModal] = useState<boolean>(false)
+  const [photo, setPhoto] = useState<File | null>(null)
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null)
 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -69,6 +71,16 @@ export default function ProtectedContent(): JSX.Element {
   const tagValues = tags && tags?.map(({ value }: any) => value)
 
   const handleAddRestaurant = async () => {
+    let photoUrl = ''
+    if (photo) {
+      try {
+        photoUrl = await uploadPhotoToBlob(photo)
+      } catch (error) {
+        console.error('Error uploading photo:', error)
+        setError('Failed to upload photo. Please try again.')
+        return
+      }
+    }
     const restaurantData = {
       name: restaurantName,
       id: id,
@@ -79,6 +91,8 @@ export default function ProtectedContent(): JSX.Element {
         longitude: longitude,
       },
       tags: tagValues,
+      photo: photoUrl,
+
     }
     try {
       setIsLoading(true)
@@ -103,6 +117,8 @@ export default function ProtectedContent(): JSX.Element {
       setLatitude(undefined)
       setLongitude(undefined)
       setTags(undefined)
+      setPhoto(null)
+      setPhotoPreview(null)
 
       // Refresh the list of restaurants
       await fetchRestaurants()
@@ -147,6 +163,39 @@ export default function ProtectedContent(): JSX.Element {
     setTags(tags.map((tag: string) => ({ value: tag, label: tag })))
   }
   console.log(neighborhood, 'neighborhood')
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0]
+      setPhoto(file)
+      setPhotoPreview(URL.createObjectURL(file))
+    }
+  }
+
+  const uploadPhotoToBlob = async (file: File) => {
+    const filename = encodeURIComponent(file.name)
+    const res = await fetch(`/api/upload-url?file=${filename}`)
+    const { url, fields } = await res.json()
+    const formData = new FormData()
+
+    Object.entries({ ...fields, file }).forEach(([key, value]) => {
+      formData.append(key, value as string | Blob)
+    })
+
+    const upload = await fetch(url, {
+      method: 'POST',
+      body: formData,
+    })
+
+    if (upload.ok) {
+      console.log('Uploaded successfully!')
+      return `${url}/${filename}`
+    } else {
+      console.error('Upload failed.')
+      throw new Error('Upload failed')
+    }
+  }
+
 
   const handleEditRestaurant = async () => {
     const restaurantData = {
@@ -308,6 +357,28 @@ export default function ProtectedContent(): JSX.Element {
               value={tags}
             />
           </div>
+          <div className="col-span-2">
+            <label htmlFor="photo" className="block text-sm font-medium text-gray-700">
+              Restaurant Photo
+            </label>
+            <input
+              type="file"
+              id="photo"
+              name="photo"
+              accept="image/*"
+              onChange={handlePhotoChange}
+              className="mt-1 block w-full text-sm text-gray-500
+                file:mr-4 file:py-2 file:px-4
+                file:rounded-full file:border-0
+                file:text-sm file:font-semibold
+                file:bg-pomelo-50 file:text-pomelo-700
+                hover:file:bg-pomelo-100"
+            />
+            {photoPreview && (
+              <img src={photoPreview} alt="Preview" className="mt-2 h-32 w-auto object-cover rounded-md" />
+            )}
+          </div>
+
         </div>
         <div className='flex mt-5 justify-center w-full'>
           <button
