@@ -21,7 +21,7 @@ export default function ProtectedContent(): JSX.Element {
   const [showAddModal, setShowAddModal] = useState<boolean>(false)
   const [photo, setPhoto] = useState<File | null>(null)
   const [photoPreview, setPhotoPreview] = useState<string | null>(null)
-  const [blob, setBlob] = useState<File | null>(null)
+  const [blob, setBlob] = useState<File | any>(null)
 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
