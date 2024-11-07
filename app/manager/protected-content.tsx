@@ -1,7 +1,8 @@
 'use client'
 
+import { upload } from '@vercel/blob/client'
 import { useRouter } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Select from 'react-select'
 import Header from '~components/header'
 import { cuisines } from '~constants'
@@ -20,10 +21,13 @@ export default function ProtectedContent(): JSX.Element {
   const [showAddModal, setShowAddModal] = useState<boolean>(false)
   const [photo, setPhoto] = useState<File | null>(null)
   const [photoPreview, setPhotoPreview] = useState<string | null>(null)
+  const [blob, setBlob] = useState<File | null>(null)
 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [timestamp, setTimestamp] = useState('')
+
+  const inputFileRef = useRef<HTMLInputElement>(null)
 
   const router = useRouter()
 
@@ -91,8 +95,7 @@ export default function ProtectedContent(): JSX.Element {
         longitude: longitude,
       },
       tags: tagValues,
-      photo: photoUrl,
-
+      photo: blob?.url,
     }
     try {
       setIsLoading(true)
@@ -162,45 +165,81 @@ export default function ProtectedContent(): JSX.Element {
     setEditing(true)
     setTags(tags?.map((tag: string) => ({ value: tag, label: tag })))
   }
-  console.log(neighborhood, 'neighborhood')
 
-  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0]
-      setPhoto(file)
-      setPhotoPreview(URL.createObjectURL(file))
-    }
-  }
+  // const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (e.target.files && e.target.files[0]) {
+  //     const file = e.target.files[0]
+  //     setPhoto(file)
+  //     setPhotoPreview(URL.createObjectURL(file))
+  //   }
+  // }
 
-  const uploadPhotoToBlob = async (file: File) => {
-    const filename = encodeURIComponent(file.name)
-    const res = await fetch(`/api/upload?file=${filename}`)
-    const { url, fields } = await res.json()
-    const formData = new FormData()
+  // const uploadPhotoToBlob = async (file: File) => {
+  //   const filename = encodeURIComponent(file.name)
+  //   const res = await fetch(`/api/upload?file=${filename}`)
+  //   const { url, fields } = await res.json()
+  //   const formData = new FormData()
 
-    Object.entries({ ...fields, file }).forEach(([key, value]) => {
-      formData.append(key, value as string | Blob)
-    })
+  //   Object.entries({ ...fields, file }).forEach(([key, value]) => {
+  //     formData.append(key, value as string | Blob)
+  //   })
 
-    const upload = await fetch(url, {
-      method: 'POST',
-      body: formData,
-    })
+  //   const upload = await fetch(url, {
+  //     method: 'POST',
+  //     body: formData,
+  //   })
 
-    if (upload.ok) {
-      console.log('Uploaded successfully!')
-      return `${url}/${filename}`
-    } else {
-      console.error('Upload failed.')
-      throw new Error('Upload failed')
-    }
-  }
+  //   if (upload.ok) {
+  //     console.log('Uploaded successfully!')
+  //     return `${url}/${filename}`
+  //   } else {
+  //     console.error('Upload failed.')
+  //     throw new Error('Upload failed')
+  //   }
+  // }
 
+  //   <>
+  //   <h1>Upload Your Avatar</h1>
+
+  //   <form
+  //     onSubmit={async (event) => {
+  //       event.preventDefault()
+
+  //       if (!inputFileRef.current?.files) {
+  //         throw new Error('No file selected')
+  //       }
+
+  //       const file = inputFileRef.current.files[0]
+
+  //       const newBlob = await upload(file.name, file, {
+  //         access: 'public',
+  //         handleUploadUrl: '/api/upload',
+  //       })
+
+  //       setBlob(newBlob)
+  //     }}>
+  //     <input name='file' ref={inputFileRef} type='file' required />
+  //     <button type='submit'>Upload</button>
+  //   </form>
+  //   {blob && (
+  //     <div>
+  //       Blob url: <a href={blob.url}>{blob.url}</a>
+  //     </div>
+  //   )}
+  // </>
 
   const handleEditRestaurant = async () => {
+    const file = inputFileRef.current.files[0]
+
+    const newBlob = await upload(file.name, file, {
+      access: 'public',
+      handleUploadUrl: '/api/upload',
+    })
+    setBlob(newBlob as any)
+    console.log(blob, 'blob?')
     const restaurantData = {
       name: restaurantName,
-      id: restaurantId, // Use the existing restaurantId instead of generating a new one
+      id: restaurantId,
       neighborhood: neighborhood?.value,
       address: '',
       coordinates: {
@@ -208,30 +247,31 @@ export default function ProtectedContent(): JSX.Element {
         longitude: longitude,
       },
       tags: tagValues,
+      photo: blob?.url,
     }
     try {
       setIsLoading(true)
-      const response = await fetch('/api/edit-restaurant', { // Change the API endpoint to edit-restaurant
-        cache: 'no-store',
-        method: 'PUT', // Use PUT method for updating
+      const response = await fetch('/api/edit-restaurant', {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(restaurantData),
       })
-  
+
       if (!response.ok) {
         throw new Error('Failed to edit restaurant')
       }
-  
-      console.log('Restaurant edited successfully!')
-  
+
+      const data = await response.json()
+      console.log('Restaurant edited successfully:', data)
+
       // Clear the form
       clearForm()
-  
+
       // Refresh the list of restaurants
       await fetchRestaurants()
-  
+
       router.refresh()
     } catch (error) {
       console.error('Error editing restaurant:', error)
@@ -357,28 +397,34 @@ export default function ProtectedContent(): JSX.Element {
               value={tags}
             />
           </div>
-          <div className="col-span-2">
-            <label htmlFor="photo" className="block text-sm font-medium text-gray-700">
+          <div className='col-span-2'>
+            <label
+              htmlFor='photo'
+              className='block text-sm font-medium text-gray-700'>
               Restaurant Photo
             </label>
             <input
-              type="file"
-              id="photo"
-              name="photo"
-              accept="image/*"
-              onChange={handlePhotoChange}
-              className="mt-1 block w-full text-sm text-gray-500
+              type='file'
+              id='photo'
+              name='photo'
+              accept='image/*'
+              ref={inputFileRef}
+              // onChange={handlePhotoChange}
+              className='mt-1 block w-full text-sm text-gray-500
                 file:mr-4 file:py-2 file:px-4
                 file:rounded-full file:border-0
                 file:text-sm file:font-semibold
                 file:bg-pomelo-50 file:text-pomelo-700
-                hover:file:bg-pomelo-100"
+                hover:file:bg-pomelo-100'
             />
             {photoPreview && (
-              <img src={photoPreview} alt="Preview" className="mt-2 h-32 w-auto object-cover rounded-md" />
+              <img
+                src={photoPreview}
+                alt='Preview'
+                className='mt-2 h-32 w-auto object-cover rounded-md'
+              />
             )}
           </div>
-
         </div>
         <div className='flex mt-5 justify-center w-full'>
           <button
