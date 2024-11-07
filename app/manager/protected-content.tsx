@@ -75,16 +75,16 @@ export default function ProtectedContent(): JSX.Element {
   const tagValues = tags && tags?.map(({ value }: any) => value)
 
   const handleAddRestaurant = async () => {
-    let photoUrl = ''
-    if (photo) {
-      try {
-        photoUrl = await uploadPhotoToBlob(photo)
-      } catch (error) {
-        console.error('Error uploading photo:', error)
-        setError('Failed to upload photo. Please try again.')
-        return
-      }
-    }
+    // let photoUrl = ''
+    // if (photo) {
+    //   try {
+    //     photoUrl = await uploadPhotoToBlob(photo)
+    //   } catch (error) {
+    //     console.error('Error uploading photo:', error)
+    //     setError('Failed to upload photo. Please try again.')
+    //     return
+    //   }
+    // }
     const restaurantData = {
       name: restaurantName,
       id: id,
@@ -95,7 +95,7 @@ export default function ProtectedContent(): JSX.Element {
         longitude: longitude,
       },
       tags: tagValues,
-      photo: blob?.url,
+      // photo: blob?.url,
     }
     try {
       setIsLoading(true)
