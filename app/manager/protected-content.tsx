@@ -229,7 +229,11 @@ export default function ProtectedContent(): JSX.Element {
   // </>
 
   const handleEditRestaurant = async () => {
-    const file = inputFileRef?.current?.files[0] 
+    if (!inputFileRef.current?.files?.length) {
+      setError('Please select a file to upload.')
+      return
+    }
+    const file = inputFileRef?.current?.files[0]
 
     const newBlob = await upload(file?.name, file, {
       access: 'public',
