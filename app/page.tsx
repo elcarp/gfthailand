@@ -31,8 +31,8 @@ const cuisineOptions = cuisines.map((cuisine) => ({ label: cuisine, value: cuisi
 
 export default function Home() {
   const [restaurants, setRestaurants] = useState([])
-  const [selectedNeighborhood, setSelectedNeighborhood] = useState(null)
-  const [selectedCuisine, setSelectedCuisine] = useState(null)
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState<any>()
+  const [selectedCuisine, setSelectedCuisine] = useState<any>()
 
   const fetchRestaurants = async () => {
     try {
