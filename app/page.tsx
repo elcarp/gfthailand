@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { Permanent_Marker } from 'next/font/google'
 import { MapPinIcon } from '@heroicons/react/24/outline'
-import Select from 'react-select'
+import Select, { SingleValue } from 'react-select'
 import Header from '~components/header'
 import GoogleMaps from '~components/maps'
 import { cuisines } from '~constants'
@@ -33,8 +33,8 @@ const cuisineOptions = cuisines.map((cuisine) => ({
 
 export default function Home() {
   const [restaurants, setRestaurants] = useState([])
-  const [selectedNeighborhood, setSelectedNeighborhood] = useState<any>()
-  const [selectedCuisine, setSelectedCuisine] = useState<any>()
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState<SingleValue<any>>()
+  const [selectedCuisine, setSelectedCuisine] = useState<SingleValue<any>>()
 
   const fetchRestaurants = async () => {
     try {
@@ -105,13 +105,8 @@ export default function Home() {
 
       <section>
         <div className='max-w-4xl py-20 mx-auto p-4'>
-          {/* <GoogleMaps
-            apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS || ''}
-            center={{ lat: 13.741791324540523, lng: 100.55651768641842 }}
-            zoom={12}
-          /> */}
           <GoogleMaps
-            apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS}
+            apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS as any}
             center={{ lat: 13.7274902015168, lng: 100.57534908460062 }}
             zoom={14}
             markers={[
