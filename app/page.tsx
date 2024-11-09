@@ -33,7 +33,8 @@ const cuisineOptions = cuisines.map((cuisine) => ({
 
 export default function Home() {
   const [restaurants, setRestaurants] = useState([])
-  const [selectedNeighborhood, setSelectedNeighborhood] = useState<SingleValue<any>>()
+  const [selectedNeighborhood, setSelectedNeighborhood] =
+    useState<SingleValue<any>>()
   const [selectedCuisine, setSelectedCuisine] = useState<SingleValue<any>>()
 
   const fetchRestaurants = async () => {
@@ -113,10 +114,12 @@ export default function Home() {
               {
                 position: { lat: 13.7274902015168, lng: 100.57534908460062 },
                 title: 'Broccoli Revolution',
+                content: '<h3>Broccoli Revolution</h3>',
               },
               {
                 position: { lat: 13.7274817565562, lng: 100.56823675334469 },
                 title: 'Vistro',
+                content: '<h3>Vistro</h3>',
               },
             ]}
           />
@@ -124,9 +127,7 @@ export default function Home() {
       </section>
 
       <section className='bg-white max-w-4xl mx-auto rounded-xl shadow-xl p-10'>
-        <h2 className={`${permanentMarker.className} text-4xl mb-6`}>
-          Trending
-        </h2>
+        <h2 className={`${permanentMarker.className} text-4xl mb-6`}>Browse</h2>
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
           {restaurants.map(({ name, photo }) => (
             <article

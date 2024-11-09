@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 interface Marker {
   position: { lat: number; lng: number }
   title?: string
+  content?: string
 }
 
 interface GoogleMapsProps {
@@ -41,13 +42,33 @@ export default function GoogleMaps({
         })
         setMap(newMap)
 
-        // Add markers
+        let currentInfoWindow: google.maps.InfoWindow | null = null
+
+        // Add markers with click popups
         markers.forEach((marker) => {
-          new window.google.maps.Marker({
+          const markerInstance = new window.google.maps.Marker({
             position: marker.position,
             map: newMap,
             title: marker.title,
           })
+
+          const infoWindow = new window.google.maps.InfoWindow({
+            content: `<div>${marker.content || marker.title}</div>`,
+          })
+
+          markerInstance.addListener('click', () => {
+            if (currentInfoWindow) {
+              currentInfoWindow.close()
+            }
+            infoWindow.open(newMap, markerInstance)
+            currentInfoWindow = infoWindow
+          })
+        })
+
+        newMap.addListener('click', () => {
+          if (currentInfoWindow) {
+            currentInfoWindow.close()
+          }
         })
       }
     }
