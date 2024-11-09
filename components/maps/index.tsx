@@ -2,24 +2,32 @@
 
 import { useEffect, useRef, useState } from 'react'
 
+interface Marker {
+  position: { lat: number; lng: number }
+  title?: string
+}
+
 interface GoogleMapsProps {
   apiKey: string
   center: { lat: number; lng: number }
   zoom?: number
+  markers?: Marker[]
 }
 
 export default function GoogleMaps({
   apiKey,
   center,
   zoom = 10,
+  markers = [],
 }: GoogleMapsProps) {
   const mapRef = useRef<HTMLDivElement>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
   const [mapLoadError, setMapLoadError] = useState<string | null>(null)
+  const [map, setMap] = useState<google.maps.Map | null>(null)
 
   useEffect(() => {
     const script = document.createElement('script')
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS}`
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}`
     script.async = true
     script.defer = true
     script.onerror = () => setMapLoadError('Failed to load Google Maps')
@@ -27,9 +35,19 @@ export default function GoogleMaps({
     script.onload = () => {
       setMapLoaded(true)
       if (mapRef.current && window.google) {
-        new window.google.maps.Map(mapRef.current, {
+        const newMap = new window.google.maps.Map(mapRef.current, {
           center,
           zoom,
+        })
+        setMap(newMap)
+
+        // Add markers
+        markers.forEach((marker) => {
+          new window.google.maps.Marker({
+            position: marker.position,
+            map: newMap,
+            title: marker.title,
+          })
         })
       }
     }
@@ -39,7 +57,7 @@ export default function GoogleMaps({
     return () => {
       document.head.removeChild(script)
     }
-  }, [apiKey, center, zoom])
+  }, [apiKey, center, zoom, markers])
 
   if (mapLoadError) {
     return (
