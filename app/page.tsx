@@ -6,7 +6,6 @@ import { MapPinIcon } from '@heroicons/react/24/outline'
 import Select from 'react-select'
 import Header from '~components/header'
 import GoogleMaps from '~components/maps'
-import RestaurantList from '~components/restaurants'
 import { cuisines } from '~constants'
 
 const permanentMarker = Permanent_Marker({
@@ -110,8 +109,6 @@ export default function Home() {
           />
         </div>
       </section>
-
-      <section>{/* <RestaurantList /> Restaurants! */}</section>
 
       <section className="bg-white max-w-4xl mx-auto rounded-xl shadow-xl p-10">
         <h2 className={`${permanentMarker.className} text-4xl mb-6`}>Trending</h2>
