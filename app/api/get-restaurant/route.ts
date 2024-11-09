@@ -50,3 +50,7 @@ export async function GET(request: Request) {
     )
   }
 }
+export async function getRestaurant(slug: string) {
+  const restaurant = await kv.hget('restaurants', slug)
+  return restaurant
+}
