@@ -3,17 +3,25 @@
 import React, { useEffect, useState } from 'react'
 import { Permanent_Marker } from 'next/font/google'
 import { MapPinIcon } from '@heroicons/react/24/outline'
-import Select, { SingleValue } from 'react-select'
-import Header from '~components/header'
-import GoogleMaps from '~components/maps'
-import { cuisines } from '~constants'
+import dynamic from 'next/dynamic'
+import Header from '~/components/header'
+import { cuisines } from '~/constants'
+import { SingleValue, GroupBase } from 'react-select'
+
+const Select = dynamic(() => import('react-select'), { ssr: false })
+const GoogleMaps = dynamic(() => import('~/components/maps'), { ssr: false })
 
 const permanentMarker = Permanent_Marker({
   weight: '400',
   subsets: ['latin'],
 })
 
-const neighborhoodOptions = [
+interface Option {
+  label: string
+  value: string
+}
+
+const neighborhoodOptions: Option[] = [
   { label: 'Sukhumvit', value: 'sukhumvit' },
   { label: 'Silom', value: 'silom' },
   { label: 'Sathorn', value: 'sathorn' },
@@ -26,35 +34,41 @@ const neighborhoodOptions = [
   { label: 'Siam', value: 'Siam' },
 ]
 
-const cuisineOptions = cuisines.map((cuisine) => ({
+const cuisineOptions: Option[] = cuisines.map((cuisine) => ({
   label: cuisine,
   value: cuisine,
 }))
 
-export default function Home() {
-  const [restaurants, setRestaurants] = useState([])
-  const [selectedNeighborhood, setSelectedNeighborhood] =
-    useState<SingleValue<any>>()
-  const [selectedCuisine, setSelectedCuisine] = useState<SingleValue<any>>()
+interface Restaurant {
+  name: string
+  photo: string
+}
 
-  const fetchRestaurants = async () => {
-    try {
-      const response = await fetch('/api/get-restaurant', {
-        cache: 'no-store',
-        headers: {
-          'Cache-Control': 'no-cache',
-          Pragma: 'no-cache',
-          Expires: '0',
-        },
-      })
-      const data = await response.json()
-      setRestaurants(data.restaurants)
-    } catch (error) {
-      console.error('Error fetching restaurants:', error)
-    }
-  }
+export default function Home() {
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([])
+  const [selectedNeighborhood, setSelectedNeighborhood] =
+    useState<SingleValue<Option>>(null)
+  const [selectedCuisine, setSelectedCuisine] =
+    useState<SingleValue<Option>>(null)
 
   useEffect(() => {
+    const fetchRestaurants = async () => {
+      try {
+        const response = await fetch('/api/get-restaurant', {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache',
+            Pragma: 'no-cache',
+            Expires: '0',
+          },
+        })
+        const data = await response.json()
+        setRestaurants(data.restaurants)
+      } catch (error) {
+        console.error('Error fetching restaurants:', error)
+      }
+    }
+
     fetchRestaurants()
   }, [])
 
@@ -87,7 +101,9 @@ export default function Home() {
                 options={neighborhoodOptions}
                 className='focus:outline-none w-full min-w-36 ml-4'
                 value={selectedNeighborhood}
-                onChange={setSelectedNeighborhood}
+                onChange={(selected) =>
+                  setSelectedNeighborhood(selected as any)
+                }
                 placeholder='Select neighborhood'
               />
             </div>
@@ -97,7 +113,7 @@ export default function Home() {
                 placeholder='Search restaurants...'
                 className='focus:outline-none w-full ml-4 capitalize'
                 value={selectedCuisine}
-                onChange={setSelectedCuisine}
+                onChange={(selected) => setSelectedCuisine(selected as any)}
               />
             </div>
           </div>
@@ -107,7 +123,7 @@ export default function Home() {
       <section>
         <div className='max-w-4xl py-20 mx-auto p-4'>
           <GoogleMaps
-            apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS as any}
+            apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}
             center={{ lat: 13.7274902015168, lng: 100.57534908460062 }}
             zoom={14}
             markers={[

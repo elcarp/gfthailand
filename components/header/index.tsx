@@ -7,8 +7,8 @@ import logo from '~public/images/gft-logo.png'
 import Image from 'next/image'
 
 const navigation = [
-  { name: 'Search', href: '#' },
-  { name: 'Discover', href: '#' },
+  { name: 'Search', href: '/restaurants' },
+  { name: 'Discover', href: '/restaurants' },
   {
     name: 'Hospitality',
     href: 'http://www.glutenfreehospitality.com',
