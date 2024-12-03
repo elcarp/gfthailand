@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import { getRestaurantById, getAllRestaurantIds, debugKV } from '~lib/kv'
+import { getRestaurantById, getAllRestaurantIds, debugKV } from '~/lib/kv'
 
 export async function generateStaticParams() {
   console.log('Generating static params...')
@@ -8,11 +8,11 @@ export async function generateStaticParams() {
   return ids.map((id) => ({ id }))
 }
 
-export default async function RestaurantPage({
-  params,
-}: {
+interface RestaurantPageProps {
   params: { id: string }
-}) {
+}
+
+export default async function RestaurantPage({ params }: RestaurantPageProps) {
   console.log('Rendering page for restaurant ID:', params.id)
 
   try {
