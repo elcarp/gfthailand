@@ -8,11 +8,7 @@ export async function generateStaticParams() {
   return ids.map((id) => ({ id }))
 }
 
-interface RestaurantPageProps {
-  params: { id: any }
-}
-
-export default async function RestaurantPage({ params }: RestaurantPageProps) {
+export default async function RestaurantPage({ params }: any) {
   console.log('Rendering page for restaurant ID:', params.id)
 
   try {
