@@ -9,7 +9,7 @@ export async function generateStaticParams() {
 }
 
 interface RestaurantPageProps {
-  params: { id: string }
+  params: { id: any }
 }
 
 export default async function RestaurantPage({ params }: RestaurantPageProps) {
