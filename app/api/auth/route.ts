@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   const { password } = await request.json()
 
   if (password === CORRECT_PASSWORD) {
-    cookies().set('auth', 'true', { httpOnly: true, secure: true })
+    (await cookies()).set('auth', 'true', { httpOnly: true, secure: true })
     return NextResponse.json({ success: true })
   } else {
     return NextResponse.json({ success: false }, { status: 401 })
