@@ -6,7 +6,7 @@ import { MapPinIcon } from '@heroicons/react/24/outline'
 import dynamic from 'next/dynamic'
 import Header from '~/components/header'
 import { cuisines } from '~/constants'
-import { SingleValue, GroupBase } from 'react-select'
+import { SingleValue } from 'react-select'
 
 const Select = dynamic(() => import('react-select'), { ssr: false })
 const GoogleMaps = dynamic(() => import('~/components/maps'), { ssr: false })
@@ -151,7 +151,7 @@ export default function Home() {
               className='relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pb-8 pt-80 sm:pt-48 lg:pt-80'>
               <img
                 alt={name}
-                src={photo || '/images/placeholder-restaurant.jpg'}
+                src={photo || '/images/default-food.jpg'}
                 className='absolute inset-0 -z-10 h-full w-full object-cover'
               />
               <div className='absolute inset-0 -z-10 bg-gradient-to-t from-gray-900 via-gray-900/40' />
