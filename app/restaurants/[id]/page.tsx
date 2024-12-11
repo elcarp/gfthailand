@@ -4,12 +4,12 @@ import Header from '~components/header'
 
 // Define the correct params type for the page
 type Params = {
-  id: string
+  id?: string
 }
 
 // Define the correct props type for the page
 type Props = {
-  params: Params
+  params?: Params
 }
 
 export async function generateStaticParams(): Promise<Params[]> {
@@ -35,7 +35,7 @@ async function getPlaceDetails(placeId: string) {
   return response.json()
 }
 
-export default async function RestaurantPage({ params }: Props) {
+export default async function RestaurantPage({ params }: any) {
   try {
     const restaurant = await getRestaurantById(params.id)
 
