@@ -1,8 +1,18 @@
 import { notFound } from 'next/navigation'
-import { getRestaurantById, getAllRestaurantIds } from '~/lib/kv'
+import { getRestaurantById, getAllRestaurantIds, debugKV } from '~/lib/kv'
 import Header from '~components/header'
 
-export async function generateStaticParams() {
+// Define the correct params type for the page
+type Params = {
+  id: string
+}
+
+// Define the correct props type for the page
+type Props = {
+  params: Params
+}
+
+export async function generateStaticParams(): Promise<Params[]> {
   const ids = await getAllRestaurantIds()
   return ids.map((id) => ({ id }))
 }
@@ -10,7 +20,7 @@ export async function generateStaticParams() {
 async function getPlaceDetails(placeId: string) {
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
   if (!apiKey) {
-    throw new Error('GOOGLE_MAPS_API_KEY is not configured')
+    throw new Error('NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is not configured')
   }
 
   const response = await fetch(
@@ -25,11 +35,7 @@ async function getPlaceDetails(placeId: string) {
   return response.json()
 }
 
-export default async function RestaurantPage({
-  params,
-}: {
-  params: { id: string }
-}) {
+export default async function RestaurantPage({ params }: Props) {
   try {
     const restaurant = await getRestaurantById(params.id)
 
@@ -39,7 +45,7 @@ export default async function RestaurantPage({
 
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
     if (!apiKey) {
-      throw new Error('GOOGLE_MAPS_API_KEY is not configured')
+      throw new Error('NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is not configured')
     }
 
     // First, find the place ID using the restaurant name and location
@@ -75,7 +81,6 @@ export default async function RestaurantPage({
     return (
       <>
         <Header />
-
         <div className='container mx-auto px-4 py-8'>
           <div className='max-w-4xl mx-auto'>
             <h1 className='text-4xl font-bold mb-6'>
