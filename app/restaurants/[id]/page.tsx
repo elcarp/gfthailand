@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import { getRestaurantById, getAllRestaurantIds, debugKV } from '~/lib/kv'
+import { getRestaurantById, getAllRestaurantIds } from '~/lib/kv'
 
 export async function generateStaticParams() {
   const ids = await getAllRestaurantIds()
