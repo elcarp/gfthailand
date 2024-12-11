@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic'
 import Header from '~/components/header'
 import { cuisines } from '~/constants'
 import { SingleValue } from 'react-select'
+import { PlacesAutocomplete } from '~components/places-autocomplete'
 
 const Select = dynamic(() => import('react-select'), { ssr: false })
 const GoogleMaps = dynamic(() => import('~/components/maps'), { ssr: false })
@@ -122,7 +123,8 @@ export default function Home() {
 
       <section>
         <div className='max-w-4xl py-20 mx-auto p-4'>
-          <GoogleMaps
+          <PlacesAutocomplete />
+          {/* <GoogleMaps
             apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}
             center={{ lat: 13.7274902015168, lng: 100.57534908460062 }}
             zoom={14}
@@ -138,7 +140,7 @@ export default function Home() {
                 content: '<h3>Vistro</h3>',
               },
             ]}
-          />
+          /> */}
         </div>
       </section>
 
