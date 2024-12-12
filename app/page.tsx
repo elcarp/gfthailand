@@ -188,23 +188,23 @@ export default function Home() {
 
       <section className='bg-white max-w-4xl mx-auto rounded-xl shadow-xl p-10'>
         <h2 className={`${permanentMarker.className} text-4xl mb-6`}>Browse</h2>
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-5'>
           {restaurants.map(({ name, id, googlePlacesData }) => (
             <Link href={`/restaurants/${id}`} key={id}>
-              <article className='relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pb-8 pt-80 sm:pt-48 lg:pt-80'>
+              <article className='h-96 relative justify-end overflow-hidden rounded-2xl bg-wheat-600 px-8 py-8 hover:shadow-2xl hover:-translate-y-1 hover:scale-105 transition ease-in-out'>
                 {googlePlacesData?.photos && googlePlacesData?.photos && (
                   <div className='mb-6'>
                     <img
                       src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=${googlePlacesData.photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`}
                       alt={name}
-                      className='w-full h-64 object-cover rounded-lg shadow-lg'
+                      className='w-full h-48 object-cover rounded-lg shadow-lg'
                     />
                   </div>
                 )}
                 <div className='absolute inset-0 -z-10 bg-gradient-to-t from-gray-900 via-gray-900/40' />
                 <div className='absolute inset-0 -z-10 rounded-2xl ring-1 ring-inset ring-gray-900/10' />
 
-                <div className='flex flex-wrap items-center gap-y-1 overflow-hidden text-sm leading-6 text-gray-300'>
+                <div className='flex flex-wrap items-center gap-y-1 overflow-hidden text-sm leading-6 text-white'>
                   <div className='-ml-4 flex items-center gap-x-4'>
                     <svg
                       viewBox='0 0 2 2'
@@ -220,7 +220,7 @@ export default function Home() {
                   {name}
                 </h3>
                 {googlePlacesData && googlePlacesData.address && (
-                  <p className='mt-2 text-sm text-gray-300 truncate'>
+                  <p className='mt-2 text-sm text-white truncate'>
                     {googlePlacesData.address}
                   </p>
                 )}
