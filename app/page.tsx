@@ -8,6 +8,8 @@ import Header from '~/components/header'
 import { cuisines } from '~/constants'
 import { SingleValue } from 'react-select'
 import Link from 'next/link'
+import { Restaurant } from '~types/restaurants'
+import { getGooglePlacesData } from '~/lib/googlePlaces'
 
 const Select = dynamic(() => import('react-select'), { ssr: false })
 const GoogleMaps = dynamic(() => import('~/components/maps'), { ssr: false })
@@ -40,14 +42,10 @@ const cuisineOptions: Option[] = cuisines.map((cuisine) => ({
   value: cuisine,
 }))
 
-interface Restaurant {
-  name: string
-  photo: string
-  id: string
-}
-
 export default function Home() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [selectedNeighborhood, setSelectedNeighborhood] =
     useState<SingleValue<Option>>(null)
   const [selectedCuisine, setSelectedCuisine] =
@@ -55,6 +53,8 @@ export default function Home() {
 
   useEffect(() => {
     const fetchRestaurants = async () => {
+      setIsLoading(true)
+      setError(null)
       try {
         const response = await fetch('/api/get-restaurant', {
           cache: 'no-store',
@@ -64,15 +64,43 @@ export default function Home() {
             Expires: '0',
           },
         })
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
         const data = await response.json()
-        setRestaurants(data.restaurants)
+        if (!data.restaurants || !Array.isArray(data.restaurants)) {
+          throw new Error('Invalid data format received from API')
+        }
+        const restaurantsWithGoogleData = await getGooglePlacesData(
+          data.restaurants
+        )
+        setRestaurants(restaurantsWithGoogleData)
       } catch (error) {
         console.error('Error fetching restaurants:', error)
+        setError('Failed to fetch restaurants. Please try again later.')
+      } finally {
+        setIsLoading(false)
       }
     }
 
     fetchRestaurants()
   }, [])
+
+  if (isLoading) {
+    return (
+      <div className='flex justify-center items-center h-screen'>
+        Loading...
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className='flex justify-center items-center h-screen text-red-500'>
+        {error}
+      </div>
+    )
+  }
 
   return (
     <>
@@ -128,18 +156,18 @@ export default function Home() {
             apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}
             center={{ lat: 13.7274902015168, lng: 100.57534908460062 }}
             zoom={14}
-            markers={[
-              {
-                position: { lat: 13.7274902015168, lng: 100.57534908460062 },
-                title: 'Broccoli Revolution',
-                content: '<h3>Broccoli Revolution</h3>',
-              },
-              {
-                position: { lat: 13.7274817565562, lng: 100.56823675334469 },
-                title: 'Vistro',
-                content: '<h3>Vistro</h3>',
-              },
-            ]}
+            markers={restaurants
+              .filter((restaurant) => restaurant.googlePlacesData)
+              .map((restaurant) => ({
+                position: {
+                  lat: restaurant.googlePlacesData!.lat,
+                  lng: restaurant.googlePlacesData!.lng,
+                },
+                title: restaurant.name,
+                content: `<h3>${restaurant.name}</h3><p>${
+                  restaurant.googlePlacesData!.address
+                }</p>`,
+              }))}
           />
         </div>
       </section>
@@ -147,11 +175,9 @@ export default function Home() {
       <section className='bg-white max-w-4xl mx-auto rounded-xl shadow-xl p-10'>
         <h2 className={`${permanentMarker.className} text-4xl mb-6`}>Browse</h2>
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
-          {restaurants.map(({ name, photo, id }) => (
+          {restaurants.map(({ name, photo, id, googlePlacesData }) => (
             <Link href={`/restaurants/${id}`} key={id}>
-              <article
-                key={name}
-                className='relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pb-8 pt-80 sm:pt-48 lg:pt-80'>
+              <article className='relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pb-8 pt-80 sm:pt-48 lg:pt-80'>
                 <img
                   alt={name}
                   src={photo || '/images/default-food.jpg'}
@@ -167,11 +193,19 @@ export default function Home() {
                       className='-ml-0.5 h-0.5 w-0.5 flex-none fill-white/50'>
                       <circle cx={1} cy={1} r={1} />
                     </svg>
+                    {googlePlacesData && (
+                      <div>{googlePlacesData.rating.toFixed(1)} ★</div>
+                    )}
                   </div>
                 </div>
                 <h3 className='mt-3 text-lg leading-6 font-semibold text-white'>
                   {name}
                 </h3>
+                {googlePlacesData && (
+                  <p className='mt-2 text-sm text-gray-300 truncate'>
+                    {googlePlacesData.address}
+                  </p>
+                )}
               </article>
             </Link>
           ))}
