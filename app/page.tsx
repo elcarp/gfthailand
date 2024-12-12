@@ -12,6 +12,7 @@ import { Restaurant } from '~types/restaurants'
 import { getGooglePlacesData } from '~/lib/googlePlaces'
 import logo from '~public/images/gft-logo.png'
 import Image from 'next/image'
+import Footer from '~components/footer'
 
 const Select = dynamic(() => import('react-select'), { ssr: false })
 const GoogleMaps = dynamic(() => import('~/components/maps'), { ssr: false })
@@ -191,7 +192,7 @@ export default function Home() {
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-5'>
           {restaurants.map(({ name, id, googlePlacesData }) => (
             <Link href={`/restaurants/${id}`} key={id}>
-              <article className='h-96 relative justify-end overflow-hidden rounded-2xl bg-wheat-600 px-8 py-8 hover:shadow-2xl hover:-translate-y-1 hover:scale-105 transition ease-in-out'>
+              <article className='h-96 relative justify-end overflow-hidden rounded-2xl bg-wheat-600 px-8 py-8 hover:shadow-2xl hover:-translate-y-1 hover:scale-105 transition ease-in-out delay-150'>
                 {googlePlacesData?.photos && googlePlacesData?.photos && (
                   <div className='mb-6'>
                     <img
@@ -229,6 +230,7 @@ export default function Home() {
           ))}
         </div>
       </section>
+      <Footer />
     </>
   )
 }
