@@ -32,7 +32,7 @@ async function fetchGooglePlacesData(query: string) {
 
   const placeId = findPlaceData.candidates[0].place_id
   const detailsResponse = await fetch(
-    `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,formatted_address,geometry,rating,formatted_phone_number&key=${apiKey}`
+    `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,formatted_address,geometry,rating,formatted_phone_number,photos&key=${apiKey}`
   )
 
   if (!detailsResponse.ok) {
@@ -52,12 +52,22 @@ async function fetchGooglePlacesData(query: string) {
     return null
   }
 
+  // Process photos
+  const photos = detailsData.result.photos
+    ? detailsData.result.photos.slice(0, 5).map((photo: any) => ({
+        photo_reference: photo.photo_reference,
+        height: photo.height,
+        width: photo.width,
+      }))
+    : []
+
   return {
     address: detailsData.result.formatted_address,
     lat: detailsData.result.geometry.location.lat,
     lng: detailsData.result.geometry.location.lng,
     rating: detailsData.result.rating,
     phone: detailsData.result.formatted_phone_number,
+    photos: photos,
   }
 }
 

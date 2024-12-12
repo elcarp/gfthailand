@@ -10,6 +10,8 @@ import { SingleValue } from 'react-select'
 import Link from 'next/link'
 import { Restaurant } from '~types/restaurants'
 import { getGooglePlacesData } from '~/lib/googlePlaces'
+import logo from '~public/images/gft-logo.png'
+import Image from 'next/image'
 
 const Select = dynamic(() => import('react-select'), { ssr: false })
 const GoogleMaps = dynamic(() => import('~/components/maps'), { ssr: false })
@@ -91,7 +93,17 @@ export default function Home() {
   if (isLoading) {
     return (
       <div className='flex justify-center items-center h-screen'>
-        Loading...
+        <div>
+          <p className='text-center'>Loading...</p>
+          <br />
+          <Image
+            className='block clear-both'
+            src={logo}
+            width={100}
+            height={100}
+            alt='Gluten Free Thailand logo'
+          />
+        </div>
       </div>
     )
   }
@@ -180,11 +192,15 @@ export default function Home() {
           {restaurants.map(({ name, photo, id, googlePlacesData }) => (
             <Link href={`/restaurants/${id}`} key={id}>
               <article className='relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pb-8 pt-80 sm:pt-48 lg:pt-80'>
-                <img
-                  alt={name}
-                  src={photo || '/images/default-food.jpg'}
-                  className='absolute inset-0 -z-10 h-full w-full object-cover'
-                />
+                {googlePlacesData?.photos && googlePlacesData?.photos && (
+                  <div className='mb-6'>
+                    <img
+                      src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=${googlePlacesData.photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`}
+                      alt={name}
+                      className='w-full h-64 object-cover rounded-lg shadow-lg'
+                    />
+                  </div>
+                )}
                 <div className='absolute inset-0 -z-10 bg-gradient-to-t from-gray-900 via-gray-900/40' />
                 <div className='absolute inset-0 -z-10 rounded-2xl ring-1 ring-inset ring-gray-900/10' />
 

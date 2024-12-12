@@ -3,6 +3,7 @@ export interface Restaurant {
   photo: string
   id: string
   googlePlacesData?: {
+    photos: any
     address: string
     lat: number
     lng: number
