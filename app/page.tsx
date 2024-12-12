@@ -77,7 +77,9 @@ export default function Home() {
         setRestaurants(restaurantsWithGoogleData)
       } catch (error) {
         console.error('Error fetching restaurants:', error)
-        setError('Failed to fetch restaurants. Please try again later.')
+        setError(
+          'Failed to fetch complete restaurant data. Some information may be missing.'
+        )
       } finally {
         setIsLoading(false)
       }
@@ -193,7 +195,7 @@ export default function Home() {
                       className='-ml-0.5 h-0.5 w-0.5 flex-none fill-white/50'>
                       <circle cx={1} cy={1} r={1} />
                     </svg>
-                    {googlePlacesData && (
+                    {googlePlacesData && googlePlacesData.rating && (
                       <div>{googlePlacesData.rating.toFixed(1)} ★</div>
                     )}
                   </div>
@@ -201,7 +203,7 @@ export default function Home() {
                 <h3 className='mt-3 text-lg leading-6 font-semibold text-white'>
                   {name}
                 </h3>
-                {googlePlacesData && (
+                {googlePlacesData && googlePlacesData.address && (
                   <p className='mt-2 text-sm text-gray-300 truncate'>
                     {googlePlacesData.address}
                   </p>
