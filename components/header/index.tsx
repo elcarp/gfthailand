@@ -39,7 +39,7 @@ export default function Example() {
             <Bars3Icon aria-hidden='true' className='h-6 w-6' />
           </button>
         </div>
-        <div className='hidden lg:flex lg:gap-x-12 lg:justify-center' style={{width: '80%'}}>
+        <div className='hidden lg:flex lg:gap-x-12 lg:justify-center w-full'>
           {navigation.map((item) => (
             <a
               key={item.name}
@@ -50,11 +50,11 @@ export default function Example() {
             </a>
           ))}
         </div>
-        <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
+        <div className='hidden lg:flex lg:justify-end w-20'>
           <a
             href='/manager'
-            className='text-sm font-semibold leading-6 text-white'>
-            Log in <span aria-hidden='true'>&rarr;</span>
+            className='text-sm font-semibold flex leading-6 text-white'>
+            Log in <span className='ml-1' aria-hidden='true'>&rarr;</span>
           </a>
         </div>
       </nav>
