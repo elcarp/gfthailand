@@ -189,7 +189,7 @@ export default function Home() {
       <section className='bg-white max-w-4xl mx-auto rounded-xl shadow-xl p-10'>
         <h2 className={`${permanentMarker.className} text-4xl mb-6`}>Browse</h2>
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
-          {restaurants.map(({ name, photo, id, googlePlacesData }) => (
+          {restaurants.map(({ name, id, googlePlacesData }) => (
             <Link href={`/restaurants/${id}`} key={id}>
               <article className='relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pb-8 pt-80 sm:pt-48 lg:pt-80'>
                 {googlePlacesData?.photos && googlePlacesData?.photos && (
