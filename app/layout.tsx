@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { Varela } from 'next/font/google'
+import Header from '~components/header'
+import Footer from '~components/footer'
 
 const varela = Varela({
   weight: '400',
@@ -19,7 +21,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`${varela.className} antialiased`}>{children}</body>
+      <body className={`${varela.className} antialiased`}>
+        <Header />
+        {children}
+        <Footer/>
+      </body>
     </html>
   )
 }

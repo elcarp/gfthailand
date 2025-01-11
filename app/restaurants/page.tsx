@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { kv } from '@vercel/kv'
-import Header from '~components/header'
 
 export default async function RestaurantListPage() {
   // Get all keys that start with 'restaurant:'
@@ -16,7 +15,6 @@ export default async function RestaurantListPage() {
 
   return (
     <>
-      <Header />
       <div className='container mx-auto px-4 py-8'>
         <h1 className='text-3xl font-bold mb-6'>Our Restaurants</h1>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>

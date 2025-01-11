@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation'
 import { getRestaurantById, getAllRestaurantIds, debugKV } from '~/lib/kv'
-import Header from '~components/header'
 
 // Define the correct params type for the page
 type Params = {
@@ -80,7 +79,6 @@ export default async function RestaurantPage({ params }: any) {
 
     return (
       <>
-        <Header />
         <div className='container mx-auto px-4 py-8'>
           <div className='max-w-4xl mx-auto'>
             <h1 className='text-4xl font-bold mb-6'>
@@ -166,7 +164,6 @@ export default async function RestaurantPage({ params }: any) {
     console.error('Error in RestaurantPage:', error)
     return (
       <>
-        <Header />
         <div className='container mx-auto px-4 py-8'>
           <h1 className='text-3xl font-bold mb-4'>Error</h1>
           <p className='text-red-600'>

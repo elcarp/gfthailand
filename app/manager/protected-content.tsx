@@ -4,7 +4,6 @@ import { upload } from '@vercel/blob/client'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect, useRef } from 'react'
 import Select from 'react-select'
-import Header from '~components/header'
 import { cuisines } from '~constants'
 
 export default function ProtectedContent(): JSX.Element {
@@ -446,7 +445,6 @@ export default function ProtectedContent(): JSX.Element {
         </div>
       </div>
 
-      <Header />
       <section className='py-20'>
         <div className='px-4 sm:px-6 lg:px-8 container mx-auto'>
           <div className='sm:flex sm:items-center'>

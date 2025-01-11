@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react'
 import { Permanent_Marker } from 'next/font/google'
 import { MapPinIcon } from '@heroicons/react/24/outline'
 import dynamic from 'next/dynamic'
-import Header from '~/components/header'
 import { cuisines } from '~/constants'
 import { SingleValue } from 'react-select'
 import Link from 'next/link'
@@ -12,7 +11,6 @@ import { Restaurant } from '~types/restaurants'
 import { getGooglePlacesData } from '~/lib/googlePlaces'
 import logo from '~public/images/gft-logo.png'
 import Image from 'next/image'
-import Footer from '~components/footer'
 
 const Select = dynamic(() => import('react-select'), { ssr: false })
 const GoogleMaps = dynamic(() => import('~/components/maps'), { ssr: false })
@@ -119,8 +117,6 @@ export default function Home() {
 
   return (
     <>
-      <Header />
-
       <section
         className='w-full h-screen lg:h-screen-1/2 flex relative'
         style={{
@@ -230,7 +226,6 @@ export default function Home() {
           ))}
         </div>
       </section>
-      <Footer />
     </>
   )
 }
